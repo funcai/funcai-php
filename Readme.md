@@ -18,9 +18,14 @@ If you have a usecase that's not listed above, please create an [issue](https://
  - **Maximum performance** - Preloads the machine learning core, so predictions are super fast
 
 ### Requirements
+ - Either the provided dockerfile
+ - Or PHP >= 7.4 on Linux
 
- - PHP >= 7.4
- - Linux
+### Run with docker
+
+ - Run `docker-compose up -d`
+ - Run `docker-compose exec app bash`
+ - Run `php example.php`
 
 ### About machine learning
 todo
@@ -43,6 +48,9 @@ and place the contents of the lib folder of the tensorflow archive inside the li
 
 Download the efficientnet model (todo)
 
+### Todo
+ - Add documentation on how to download efficientnet
+ - Check for memory leaks
 
 ### Development
 

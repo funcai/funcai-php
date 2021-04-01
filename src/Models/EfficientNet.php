@@ -1,8 +1,7 @@
 <?php
 namespace FuncAI\Models;
 
-use const FuncAI\FLOAT;
-use const FuncAI\INT32;
+use FuncAI\Tensorflow\TensorFlow;
 
 class EfficientNet extends AbstractModel
 {
@@ -13,11 +12,11 @@ class EfficientNet extends AbstractModel
 
     public function getOutputTensor()
     {
-        $output = $this->tf->graph->operation('StatefulPartitionedCall')->output(0);
+        $output = $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall')->output(0);
 
         // Get the best result
         $topResult = $this->tf->op('Reshape', [
-            $this->tf->op('TopKV2', [$output, $this->tf->constant(1, INT32)], [], [], null, 1),
+            $this->tf->op('TopKV2', [$output, $this->tf->constant(1, TensorFlow::INT32)], [], [], null, 1),
             $this->tf->constant([-1])]);
 
         // See https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a for a list of categories
@@ -32,8 +31,10 @@ class EfficientNet extends AbstractModel
         $img = imagescale($img, 224, 224);
         $w = imagesx($img);
         $h = imagesy($img);
-        $ret = $this->tf->tensor(null, FLOAT, [1, $w, $h, 3]);
+        $ret = $this->tf->tensor(null, TensorFlow::FLOAT, [1, $w, $h, 3]);
         $data = $ret->data();
+
+        // Convert the image data into a flat array
         for ($y = 0; $y < $h; $y++) {
             for ($x = 0; $x < $w; $x++) {
                 $rgb = imagecolorat($img, $x, $y);
