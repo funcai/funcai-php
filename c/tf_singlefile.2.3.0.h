@@ -1,5 +1,12 @@
 #define FFI_SCOPE "TensorFlow"
-#define FFI_LIB "/home/paul/dev/funcai-php/php-tensorflow/c/libtensorflow.so.2.4.0"
+#define FFI_LIB "/home/paul/dev/funcai-php/lib/libtensorflow.so"
+
+/*
+ * We made some pretty significant updates to this file.
+ * Most importantly, we merged all the relevant header files from tensorflow
+ * into this one file, because PHP FFI doesn't support #include.
+ * We also removed some code that is also not compatible with PHP FFI.
+ */
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -118,26 +125,6 @@ extern TF_Code TF_GetCode(const TF_Status* s);
 extern const char* TF_Message(const TF_Status* s);
 
 
-// TF_Bool is the C API typedef for unsigned char, while TF_BOOL is
-// the datatype for boolean tensors.
-typedef struct TF_Bool {
-  const void* data;
-} TF_Bool;
-// Macro used to calculate struct size for maintaining ABI stability across
-// different struct implementations.
-#ifndef TF_OFFSET_OF_END
-#define TF_OFFSET_OF_END(TYPE, MEMBER) (offsetof(TYPE, MEMBER) + sizeof(((TYPE *)0)->MEMBER))
-#endif  // TF_OFFSET_OF_END
-
-
-// Allocator Attributes used for tensor allocation.
-typedef struct TF_AllocatorAttributes {
-  size_t struct_size;
-  // Set boolean to 1 for CPU allocation, else 0.
-  TF_Bool on_host;
-} TF_AllocatorAttributes;
-
-#define TF_ALLOCATOR_ATTRIBUTES_STRUCT_SIZE TF_OFFSET_OF_END(TF_AllocatorAttributes, on_host)
 
 // --------------------------------------------------------------------------
 // TF_Tensor holds a multi-dimensional array of elements of a single data type.
@@ -242,65 +229,36 @@ extern void TF_TensorBitcastFrom(const TF_Tensor* from,
                                                 int num_new_dims,
                                                 TF_Status* status);
 
+// --------------------------------------------------------------------------
+// Encode the string `src` (`src_len` bytes long) into `dst` in the format
+// required by TF_STRING tensors. Does not write to memory more than `dst_len`
+// bytes beyond `*dst`. `dst_len` should be at least
+// TF_StringEncodedSize(src_len).
+//
+// On success returns the size in bytes of the encoded string.
+// Returns an error into `status` otherwise.
+extern size_t TF_StringEncode(const char* src, size_t src_len,
+                                             char* dst, size_t dst_len,
+                                             TF_Status* status);
+
+// Decode a string encoded using TF_StringEncode.
+//
+// On success, sets `*dst` to the start of the decoded string and `*dst_len` to
+// its length. Returns the number of bytes starting at `src` consumed while
+// decoding. `*dst` points to memory within the encoded buffer.  On failure,
+// `*dst` and `*dst_len` are undefined and an error is set in `status`.
+//
+// Does not read memory more than `src_len` bytes beyond `src`.
+extern size_t TF_StringDecode(const char* src, size_t src_len,
+                                             const char** dst, size_t* dst_len,
+                                             TF_Status* status);
+
+// Return the size in bytes required to encode a string `len` bytes long into a
+// TF_STRING tensor.
+extern size_t TF_StringEncodedSize(size_t len);
+
 // Returns bool iff this tensor is aligned.
 extern bool TF_TensorIsAligned(const TF_Tensor*);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ctstring_internal.h
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // --------------------------------------------------------------------------
@@ -349,6 +307,7 @@ extern bool TF_TensorIsAligned(const TF_Tensor*);
 //   and the API just provides high level controls over the number of
 //   devices of each type.
 
+
 // --------------------------------------------------------------------------
 // TF_Version returns a string describing version information of the
 // TensorFlow library. TensorFlow using semantic versioning.
@@ -379,14 +338,6 @@ extern TF_Buffer* TF_NewBuffer(void);
 extern void TF_DeleteBuffer(TF_Buffer*);
 
 extern TF_Buffer TF_GetBuffer(TF_Buffer* buffer);
-
-// --------------------------------------------------------------------------
-// Used to return strings across the C API. The caller does not take ownership
-// of the underlying data pointer and is not responsible for freeing it.
-typedef struct TF_StringView {
-  const char* data;
-  size_t len;
-} TF_StringView;
 
 // --------------------------------------------------------------------------
 // TF_SessionOptions holds options that can be passed during session creation.
@@ -1779,10 +1730,6 @@ extern TF_Buffer* TF_GetAllRegisteredKernels(TF_Status* status);
 extern TF_Buffer* TF_GetRegisteredKernelsForOp(
     const char* name, TF_Status* status);
 
-// Update edge, switch input/ output in a node
-extern void TF_UpdateEdge(TF_Graph* graph, TF_Output new_src,
-                                         TF_Input dst, TF_Status* status);
-
 // --------------------------------------------------------------------------
 // In-process TensorFlow server functionality, for use in distributed training.
 // A Server instance encapsulates a set of devices and a Session target that
@@ -1831,14 +1778,3 @@ extern void TF_DeleteServer(TF_Server* server);
 // logs.
 extern void TF_RegisterLogListener(
     void (*listener)(const char*));
-
-// Register a FileSystem plugin from filename `plugin_filename`.
-//
-// On success, place OK in status.
-// On failure, place an error status in status.
-extern void TF_RegisterFilesystemPlugin(
-    const char* plugin_filename, TF_Status* status);
-
-
-
-

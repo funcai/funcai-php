@@ -1,4 +1,6 @@
 <?php
+namespace FuncAI;
+
 function print_graph($g)
 {
     foreach ($g->operations() as $op) {

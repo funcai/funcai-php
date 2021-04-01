@@ -1,8 +1,11 @@
 <?php
-require_once("./TensorFlow2.php");
-require_once("PrintGraph.php");
+require __DIR__.'/vendor/autoload.php';
 
-const MODEL = '../models/efficientnet';
+use FuncAI\TensorFlow;
+use const FuncAI\INT32;
+
+
+const MODEL = './models/efficientnet';
 
 function main()
 {
@@ -17,23 +20,24 @@ function main()
     // Get the best 3 results
     $out_label =
         $tf->op('Reshape', [
-            $tf->op('TopKV2', [$out, $tf->constant(3, \TF\INT32)], [], [], null, 1),
+            $tf->op('TopKV2', [$out, $tf->constant(3, INT32)], [], [], null, 1),
             $tf->constant([-1])]);
 
     $inputTensor = getInputTensor($tf);
     $ret = $sess->run($out_label, ['serving_default_input_1' => $inputTensor]);
     $labels = $ret->value();
+    // See https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a for a list of categories
     print_r($labels);
 }
 
 function getInputTensor($tf)
 {
-    $image = 'snail.jpg';
+    $image = './sample_data/butterfly.jpg';
     $img = imagecreatefromjpeg($image);
     $img = imagescale($img, 224, 224);
     $w = imagesx($img);
     $h = imagesy($img);
-    $ret = $tf->tensor(null, \TF\FLOAT, [1, $w, $h, 3]);
+    $ret = $tf->tensor(null, \FuncAI\FLOAT, [1, $w, $h, 3]);
     $data = $ret->data();
     for ($y = 0; $y < $h; $y++) {
         for ($x = 0; $x < $w; $x++) {

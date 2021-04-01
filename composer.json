@@ -1,0 +1,24 @@
+{
+    "name": "funcai/funcai-php",
+    "description": "High performance, state of the art machine learning in php",
+    "type": "library",
+    "keywords": [
+      "tensorflow",
+      "ai",
+      "machine learning",
+      "image recognition",
+      "prediction",
+      "ffi"
+    ],
+    "license": "MIT",
+    "require": {
+      "php": "^7.4.0",
+      "ext-gd": "*",
+      "ext-ffi": "*"
+    },
+    "autoload": {
+      "psr-4": {
+        "FuncAI\\": "src/"
+      }
+    }
+}

@@ -9,7 +9,6 @@ services:
       - "80:80"
     volumes:
      - .:/var/www/html:cached
-     - ./libtensorflow/lib:/usr/local/lib/
     environment:
       DB_HOST: "mysql"
       DB_PASSWORD: "secret"

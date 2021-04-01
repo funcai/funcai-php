@@ -1,6 +1,6 @@
 <?php
+namespace FuncAI;
 
-namespace TF;
 // This is based off of https://github.com/dstogov/php-tensorflow
 use FFI;
 
@@ -86,7 +86,7 @@ class API
 
     static protected function init_tf_ffi()
     {
-        self::$ffi = FFI::load(__DIR__ . "/c/tf_singlefile.2.3.0.h");
+        self::$ffi = FFI::load(__DIR__ . "/../c/tf_singlefile.2.3.0.h");
         self::$tensor_ptr = self::$ffi->type("TF_Tensor*");
         self::$operation_ptr = self::$ffi->type("TF_Operation*");
     }
@@ -1388,5 +1388,3 @@ final class TensorFlow extends API
         return new Session($graph, null, $this->status);
     }
 }
-
-class_alias("\TF\TensorFlow", "TensorFlow");
