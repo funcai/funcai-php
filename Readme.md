@@ -22,6 +22,13 @@ If you have a usecase that's not listed above, please create an [issue](https://
  - PHP >= 7.4
  - Linux
 
+### About machine learning
+todo
+ - Pick the correct tasks (easy for computer, hard / repetitive for humans)
+ - Training bias dilemma
+ - Uncertainty
+ - Specific tasks
+
 ### Architecture
 
  - Uses [FFI](https://www.php.net/manual/en/class.ffi.php) to talk to tensorflow for predictions
@@ -34,10 +41,14 @@ https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-
 
 and place the contents of the lib folder of the tensorflow archive inside the lib folder in the root of the funcai-php project.
 
-
 Download the efficientnet model (todo)
 
 
 ### Development
+
+#### Git lfs
+You need [git lfs](https://git-lfs.github.com/) to checkout this repository.
+Afterwards make sure you run `git lfs pull` to download the tensorflow libraries
+
 #### Better phpstorm support
 Go to your settings and open "Languages & Frameworks -> PHP -> PHP Runtime -> Others". Make sure "FFI" is checked. 
