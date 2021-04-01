@@ -1,0 +1,18 @@
+version: '2'
+services:
+  app:
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+    image: funcai/php
+    ports:
+      - "80:80"
+    volumes:
+     - .:/var/www/html:cached
+     - ./libtensorflow/lib:/usr/local/lib/
+    environment:
+      DB_HOST: "mysql"
+      DB_PASSWORD: "secret"
+      DB_DATABASE: "imagelint"
+      DB_USERNAME: "homestead"
+      DB_PORT: "3306"
