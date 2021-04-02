@@ -1,13 +1,14 @@
 <?php
 namespace FuncAI\Models;
 
+use FuncAI\Config;
 use FuncAI\Tensorflow\TensorFlow;
 
 class EfficientNet extends AbstractModel
 {
     public function getModelPath()
     {
-        return __DIR__ . '/../../models/efficientnet';
+        return Config::getModelBasePath() . '/efficientnet';
     }
 
     public function getOutputTensor()

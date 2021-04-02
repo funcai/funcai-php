@@ -18,6 +18,25 @@ If you have a usecase that's not listed above, please create an [issue](https://
  - **Super simple API** - No machine learning knowledge required
  - **Maximum performance** - Preloads the machine learning core, so predictions are super fast
 
+### Installation
+Install the package via composer:
+
+    composer require funcai/funcai-php
+
+Until we've figured out a solution for how to host the final models, the following step is a bit more difficult than we'd like it to be.
+
+You'll need to have python installed (locally), and some sort of way to host the model files yourself.
+
+To generate the model, run:
+
+    pip3 install tensorflow
+    python3 scripts/generate/efficientnet.py
+
+The model will be placed in /models/efficientnet. You will need to have access to this folder from your webserver. For example, if you've uploaded the folder to /var/www/models/efficientnet, you should set the path like this:
+
+    \FuncAI\Config::setModelBasePath('/var/www/models');
+
+
 ### Requirements
  - Either the provided dockerfile
  - Or PHP >= 7.4 on Linux
