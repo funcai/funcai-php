@@ -30,9 +30,9 @@ You'll need to have python installed (locally), and some sort of way to host the
 To generate the model, run:
 
     pip3 install tensorflow
-    python3 scripts/generate/efficientnet.py
+    python3 vendor/funcai/funcai-php/scripts/generate/efficientnet.py
 
-The model will be placed in /models/efficientnet. You will need to have access to this folder from your webserver. For example, if you've uploaded the folder to /var/www/models/efficientnet, you should set the path like this:
+The model will be placed in vendor/funcai/funcai-php/models/efficientnet. You will need to have access to this folder from your webserver. For example, if you've uploaded the folder to /var/www/models/efficientnet, you should set the path like this:
 
     \FuncAI\Config::setModelBasePath('/var/www/models');
 
@@ -61,7 +61,8 @@ todo
  - Currently runs on linux with CPU support
 
 ### Todo
- - Add documentation on how to download efficientnet
+ - Fix path of libtensorflow.so in tf_singlefile.h
+ - Find a better way to download/host models
  - Check for memory leaks
 
 ### Development
