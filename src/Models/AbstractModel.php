@@ -18,6 +18,22 @@ abstract class AbstractModel implements ModelInterface
         $this->tf = new TensorFlow();
     }
 
+    /**
+     * Preloads the model into memory
+     * Do this for example after you've started your queue worker
+     */
+    public function boot()
+    {
+        $this->getSession();
+    }
+
+    /**
+     * Runs the model to return the predicted output
+     *
+     * @param $input
+     * @return mixed
+     * @throws TensorflowException
+     */
     public function predict($input)
     {
         // Load the model
@@ -36,6 +52,11 @@ abstract class AbstractModel implements ModelInterface
         return $this->transformResult($ret->value());
     }
 
+    /**
+     * Cleanup memory
+     *
+     * @throws TensorflowException
+     */
     public function close()
     {
         if(!$this->session) {
