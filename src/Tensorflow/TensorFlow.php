@@ -64,7 +64,7 @@ class TensorFlow
     private function initializeFFI()
     {
         $cwd = getcwd();
-        chdir(realpath(__DIR__ . '/../../lib'));
+        chdir(realpath(__DIR__ . '/../..'));
 
         TensorFlow::$ffi = FFI::load(__DIR__ . "/../../c/tf_singlefile.2.3.0.h");
 
