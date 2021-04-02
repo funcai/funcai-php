@@ -1,5 +1,5 @@
 #define FFI_SCOPE "TensorFlow"
-#define FFI_LIB "/var/www/html/lib/libtensorflow.so.2.3.0"
+#define FFI_LIB "./lib/libtensorflow.so.2.3.0"
 
 /*
  * We made some pretty significant updates to this file.

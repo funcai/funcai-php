@@ -1,5 +1,5 @@
 #define FFI_SCOPE "TensorFlow"
-#define FFI_LIB "/home/paul/dev/funcai-php/lib/libtensorflow.so"
+#define FFI_LIB "./lib/libtensorflow.so"
 
 /*
  * We made some pretty significant updates to this file.
