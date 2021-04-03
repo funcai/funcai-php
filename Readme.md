@@ -16,7 +16,7 @@ If you have a usecase that's not listed above, please create an [issue](https://
 
  - **Runs everywhere** - You only need PHP, **nothing else**
  - **Super simple API** - No machine learning knowledge required
- - **Maximum performance** - Preloads the machine learning core, so predictions are super fast
+ - **Many applications** - Wide range of machine learning applications ready to use
 
 ## Installation
 #### 1. Install the package via composer:
