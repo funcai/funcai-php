@@ -3,6 +3,7 @@ namespace FuncAI;
 
 class Config {
     private static string $modelBasePath;
+    private static string $libPath;
 
     /**
      * @return string
@@ -21,6 +22,22 @@ class Config {
     public static function setModelBasePath(string $modelBasePath): void
     {
         self::$modelBasePath = $modelBasePath;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getLibPath(): string
+    {
+        return self::$libPath;
+    }
+
+    /**
+     * @param string $libPath
+     */
+    public static function setLibPath(string $libPath): void
+    {
+        self::$libPath = $libPath;
     }
 
 }

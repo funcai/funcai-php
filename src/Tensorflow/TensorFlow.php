@@ -4,6 +4,7 @@ namespace FuncAI\Tensorflow;
 
 use Exception;
 use FFI;
+use FuncAI\Config;
 
 class TensorFlow
 {
@@ -63,7 +64,7 @@ class TensorFlow
 
     private function initializeFFI()
     {
-        TensorFlow::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/../../c/tf_singlefile.2.3.0.h"), __DIR__ . "/../../lib/libtensorflow.so.2.3.0");
+        TensorFlow::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/../../c/tf_singlefile.2.3.0.h"), Config::getLibPath() . "libtensorflow.so.2.3.0");
     }
 
     public function version()

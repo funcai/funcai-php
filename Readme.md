@@ -67,11 +67,6 @@ todo
 
 ### Development
 
-#### Git lfs
-You need [git lfs](https://git-lfs.github.com/) to checkout this repository. After installing it run:
-
-    git lfs pull
-
 #### Docker (optional, but recommended)
 Install [Docker](https://docs.docker.com/get-docker/) if you do not have it already.
 
@@ -98,8 +93,3 @@ to get a Terminal inside of the docker container
 
 #### Better phpstorm support (optional)
 Go to your settings and open "Languages & Frameworks -> PHP -> PHP Runtime -> Others". Make sure "FFI" is checked. 
-
-#### Manually installing libtensorflow (without git lfs)
-Download libtensorflow from:
-https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.3.0.tar.gz
-and place the contents of the lib folder of the tensorflow archive inside the lib folder in the root of the funcai-php project.
