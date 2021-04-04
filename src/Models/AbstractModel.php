@@ -2,6 +2,7 @@
 
 namespace FuncAI\Models;
 
+use FuncAI\Tensorflow\Helpers;
 use FuncAI\Tensorflow\TensorFlow;
 use FuncAI\TensorFlow\TensorflowException;
 
@@ -42,11 +43,14 @@ abstract class AbstractModel implements ModelInterface
         // Get the output tensor
         $output = $this->getOutputTensor();
 
-        $inputTensor = $this->getInputTensor($input);
+        $inputData = $this->getInputData($input);
+        if(!is_array($inputData)) {
+            $inputData = [$this->getInputLayer() => $inputData];
+        }
 
         $ret = $session->run(
             $output,
-            [$this->getInputLayer() => $inputTensor],
+            $inputData,
         );
 
         return $this->transformResult($ret->value());
@@ -65,6 +69,11 @@ abstract class AbstractModel implements ModelInterface
         $this->getSession()->close();
     }
 
+    public function printGraph()
+    {
+        Helpers::printGraph($this->getSession()->getGraph());
+    }
+
     protected function getSession()
     {
         if(is_null($this->session)) {
@@ -76,5 +85,10 @@ abstract class AbstractModel implements ModelInterface
     protected function transformResult($result)
     {
         return $result;
+    }
+
+    public function getInputLayer()
+    {
+        return '';
     }
 }

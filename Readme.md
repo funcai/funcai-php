@@ -4,11 +4,11 @@ High performance, state of the art machine learning in php.
 ## Available applications
 
  - **Image recognition** - Get a label for a given image (in progress)
+ - **Image upscaling** - Increase the size of your images (in progress)
+ - **Sentiment analysis** - Find out if a user generated text is positive or negative (in progress)
  - **Time series forecasting** - Predict what will happen in the future based on past events (planned)
- - **Sentiment analysis** - Find out if a user generated text is positive or negative (planned)
  - **Text summary** - Generate a summary from a given text (in progress)
- - **Image upscaling** - Increase the size of your images (planned)
- - **Translation** - Translate your text from one language to another (planned, https://huggingface.co/facebook/mbart-large-50-many-to-many-mmt)
+ - **Translation** - Translate your text from one language to another (planned, https://ai.googleblog.com/2017/04/introducing-tf-seq2seq-open-source.html, https://huggingface.co/facebook/mbart-large-50-many-to-many-mmt, https://google.github.io/seq2seq/nmt/)
  
 If you have a usecase that's not listed above, please create an [issue](https://github.com/funcai/funcai-php/issues/new) and explain what you would like to do.
 
@@ -63,7 +63,7 @@ After you've completed the installation steps you can run your first prediction:
 ### About machine learning
 todo
 - Pick the correct tasks (easy for computer, hard / repetitive for humans)
-- Training bias dilemma
+- Responsibility (https://www.tensorflow.org/responsible_ai)
 - Uncertainty
 - Specific tasks
 

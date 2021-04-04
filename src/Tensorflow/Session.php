@@ -165,4 +165,12 @@ class Session
 
         throw new TensorflowException('No fetches defined');
     }
+
+    /**
+     * @return Graph
+     */
+    public function getGraph(): Graph
+    {
+        return $this->graph;
+    }
 }

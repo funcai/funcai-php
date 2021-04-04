@@ -2,6 +2,8 @@
 
 namespace FuncAI\Tensorflow;
 
+use FFI;
+
 class Operation
 {
     public $c;

@@ -20,6 +20,9 @@ class TensorflowInstaller
 
     public function install()
     {
+        if($this->isInstalled()) {
+            return;
+        }
         $installPath = Config::getLibPath();
         echo "Starting to install Tensorflow to '$installPath'\n";
         if($this->isInstalled()) {
@@ -38,7 +41,6 @@ class TensorflowInstaller
     {
         $requiredFiles = [
             'libtensorflow.so.2.3.0',
-            'TensorflowLicense.txt',
             'libtensorflow_framework.so.2'
         ];
         foreach($requiredFiles as $requiredFile) {
@@ -60,9 +62,9 @@ class TensorflowInstaller
     private function downloadLib()
     {
         echo "Downloading libtensorflow...\n";
-        $tensorflowLib = 'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.3.0.tar.gz';
-        $tmpfilePath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.3.0.tar.gz';
-        $decompressedPath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.3.0.tar';
+        $tensorflowLib = 'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.3.1.tar.gz';
+        $tmpfilePath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.3.1.tar.gz';
+        $decompressedPath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.3.1.tar';
         $extractionPath = sys_get_temp_dir().'/libtensorflow';
 
         if(!file_exists($tmpfilePath)) {
@@ -91,8 +93,8 @@ class TensorflowInstaller
         $phar = new PharData($decompressedPath);
 
         $files = [
-            './lib/libtensorflow.so.2.3.0' => Config::getLibPath() . '/libtensorflow.so.2.3.0',
-            './lib/libtensorflow_framework.so.2.3.0' => Config::getLibPath() . '/libtensorflow_framework.so.2',
+            './lib/libtensorflow.so.2.3.1' => Config::getLibPath() . '/libtensorflow.so.2.3.0',
+            './lib/libtensorflow_framework.so.2.3.1' => Config::getLibPath() . '/libtensorflow_framework.so.2',
             './LICENSE' => Config::getLibPath() . '/LICENSE',
             './THIRD_PARTY_TF_C_LICENSES' => Config::getLibPath() . '/THIRD_PARTY_TF_C_LICENSES',
         ];

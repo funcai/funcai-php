@@ -25,7 +25,7 @@ class EfficientNet extends AbstractModel
         return $topResult;
     }
 
-    public function getInputTensor($imagePath)
+    public function getInputData($imagePath)
     {
         $img = imagecreatefromjpeg($imagePath);
         // Todo: add black bars to not squish the image
