@@ -3,7 +3,8 @@
 </h1>
 
 <h4 align="center">
-    FuncAI is a high performance, state of the art machine learning library for PHP.<br>It has no external dependencies like python or nodejs but uses Tensorflow under the hood.
+    FuncAI is a high performance, state of the art machine learning library for PHP.<br>
+    It has no dependencies and can run everywhere PHP can run.
 </h4>
 
 
