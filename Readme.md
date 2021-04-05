@@ -71,7 +71,7 @@ If you have a usecase that's not listed above, please create an [issue](https://
  - **Many applications** - Wide range of machine learning applications ready to use
 
 ## Installation
-#### 1. Install the package via composer:
+#### 1. Install the package via [composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos):
 
     composer require funcai/funcai-php
 
@@ -93,7 +93,7 @@ For example, move it to `/var/www/models` on your server. In that case make sure
 
     \FuncAI\Config::setModelBasePath('/var/www/models');
 
-You can also just move the folder directly into your project and check them into git, but the folder might get quite big (100 Mb up to multiple Gb).
+You can also move the folder directly into your project and check them into git, but the folder might get quite big (100 Mb up to multiple Gb).
 
 ## Usage
 After you've completed the installation steps you can run your first prediction:
@@ -145,7 +145,7 @@ To be able to run the example file you need to run the following docker command 
 
     docker run -it --rm -v $PWD:/code -w /code tensorflow/tensorflow:2.3.0 python scripts/generate/efficientnet.py
 
-Alternatively, if you already have python3 installed you can just run:
+Alternatively, if you already have python3 installed you can directly run:
 
     pip3 install tensorflow
     python3 scripts/generate/efficientnet.py
@@ -161,7 +161,7 @@ Afterwards run:
 
 to get a Terminal inside of the docker container.
 
-Alternatively you can just setup a PHP 7.4 environment locally and use that.
+Alternatively you can setup a PHP 7.4 environment locally and use that.
 
 #### Better phpstorm support (optional)
 Go to your settings and open "Languages & Frameworks -> PHP -> PHP Runtime -> Others". Make sure "FFI" is checked. 
