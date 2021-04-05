@@ -17,22 +17,15 @@ require __DIR__.'/vendor/autoload.php';
 \FuncAI\Config::setLibPath(dirname(__FILE__) . '/tensorflow/');
 
 
-/**
- * Installation
- * This downloads all necessary files and makes sure they are set up correctly.
- */
-$tfi = new \FuncAI\Install\TensorflowInstaller();
-$tfi->install();
-
 
 /**
  * Prediction
  * This is a sample prediction which uses the efficientNet model to determine the contents
  * of an image.
  */
-$model = new \FuncAI\Models\EsrGAN();
+$model = new \FuncAI\Models\Imagenet21k();
 // Remove the comment from the following lines to enable prediction.
 // CAREFUL: Using images which are too large will crash your machine.
 
-# $output = $model->predict(__DIR__ . '/sample_data/butterfly.jpg');
-# var_dump($output);
+$output = $model->predict(__DIR__ . '/sample_data/butterfly.jpg');
+var_dump($output);

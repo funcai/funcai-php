@@ -9,9 +9,9 @@
 <hr>
 
 <h3 align="center">
-🖼️ Image stylization
+🖼️ Image stylization 🖼️
 </h3>
-Apply the style of one image to another image
+Apply the style of one image to another image.
 
 #### Example
 
@@ -20,9 +20,36 @@ Apply the style of one image to another image
 </p>
 
 #### Use it for:
-   - Generating artistic versions of user provided images 
-   - Ensuring a consistent style of cover images
-   - For anonymizing avatars 
+- Generating artistic versions of user provided images
+- Ensuring a consistent style of cover images
+- For anonymizing avatars
+
+#### Credits
+- [The Tensorflow model](https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2)
+- [The Paper](https://arxiv.org/abs/1705.06830)
+
+<hr>
+
+
+<h3 align="center">
+🏷️ Image classification 🖼️
+</h3>
+Find out what's in an image. Returns the top 5 classes out of a list of 21.825 classes.
+
+#### Example
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/funcai/funcai-php/main/.github/img/php-ai-image-classification.jpg" alt="An image of a butterfly and 5 matching labels next to it" width="684">
+</p>
+
+#### Use it for:
+- Making your images searchable by content
+- Automatically generating image names or alt attributes
+- Grouping your images by content
+
+#### Credits
+ - [The Tensorflow model](https://tfhub.dev/google/bit/m-r50x1/imagenet21k_classification/1)
+ - [The Paper](https://arxiv.org/abs/1912.11370)
 
 <hr>
 
