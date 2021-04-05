@@ -32,7 +32,7 @@ Apply the style of one image to another image.
 
 
 <h3 align="center">
-🏷️ Image classification 🖼️
+🏷️ Image classification 🏷️
 </h3>
 Find out what's in an image. Returns the top 5 classes out of a list of 21.825 classes.
 
