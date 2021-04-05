@@ -1,8 +1,16 @@
-# FuncAI PHP
-High performance, state of the art machine learning in php.
+<h1 align="center">
+🌟 FuncAI PHP 🌟
+</h1>
 
-## Available applications
-### 🖼️ Image stylization
+<h4 align="center">
+    FuncAI is a high performance, state of the art machine learning library for PHP.<br>It has no external dependencies like python or nodejs but uses Tensorflow under the hood.
+</h4>
+
+<hr>
+
+<h3 align="center">
+🖼️ Image stylization
+</h3>
 Apply the style of one image to another image
 
 #### Example
@@ -15,6 +23,8 @@ Apply the style of one image to another image
    - Generating artistic versions of user provided images 
    - Ensuring a consistent style of cover images
    - For anonymizing avatars 
+
+<hr>
 
 ### Future applications
 
