@@ -29,17 +29,11 @@ If you have a usecase that's not listed above, please create an [issue](https://
 
 This downloads tensorflow to `./tensorflow`.
 
-#### 3. Download the required models
-Until we've figured out a solution for how to host the final models, the following step is a bit more difficult than we'd like it to be.
+#### 3. Download a model
 
-You'll need to have python installed (locally), and some sort of way to host the model files yourself.
+    php vendor/funcai/funcai-php/install-stylization.php
 
-To generate the model, run:
-
-    pip3 install tensorflow
-    python3 vendor/funcai/funcai-php/scripts/generate/efficientnet.py
-
-The model will be placed in vendor/funcai/funcai-php/models.
+This downloads the stylization model to `./models`
 
 #### 4. Configure the models folder
 You will need to move the models folder to a permanent location.
@@ -53,8 +47,14 @@ You can also just move the folder directly into your project and check them into
 After you've completed the installation steps you can run your first prediction:
 
     \FuncAI\Config::setLibPath('./tensorflow/'); // This should point to the path from step 2 
-    $model = new \FuncAI\Models\EfficientNet();
-    $output = $model->predict('./vendor/funcai/funcai-php/sample_data/butterfly.jpg');
+    \FuncAI\Config::setModelBasePath('./models'); // This should point to the path from step 4
+    $model = new \FuncAI\Models\Stylization();
+    $model->predict([
+    __DIR__ . '/sample_data/prince-akachi.jpg',
+    __DIR__ . '/sample_data/style.jpg',
+    ]);
+
+This will output the stylized image to `./out.jpg`.
 
 ## Requirements
  - PHP >= 7.4 on Linux

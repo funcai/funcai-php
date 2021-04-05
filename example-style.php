@@ -31,9 +31,9 @@ $tfi->install();
  * of an image.
  */
 $model = new \FuncAI\Models\Stylization();
-#$model->printGraph();
 $output = $model->predict([
-    __DIR__ . '/sample_data/mona-lisa.jpg',
-    __DIR__ . '/sample_data/style5.jpg',
+    __DIR__ . '/sample_data/prince-akachi.jpg',
+    __DIR__ . '/sample_data/style.jpg',
 ]);
-# var_dump($output);
+
+echo "Saved the stylized image to ./out.jpg";
