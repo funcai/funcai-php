@@ -6,6 +6,13 @@
     FuncAI is a high performance, state of the art machine learning library for PHP.<br>It has no external dependencies like python or nodejs but uses Tensorflow under the hood.
 </h4>
 
+
+<p align="center">
+<a href="https://sopamo.typeform.com/to/TjmZPnFo" target="_blank">
+    <img src="https://raw.githubusercontent.com/funcai/funcai-php/main/.github/img/feedback.png" alt="If you can spare 2 minutes, please give me some feedback" width="269">
+</a>
+</p>
+
 <hr>
 
 <h3 align="center">
