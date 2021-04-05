@@ -23,6 +23,16 @@ require __DIR__.'/vendor/autoload.php';
  * This is a sample prediction which uses the efficientNet model to determine the contents
  * of an image.
  */
-$model = new \FuncAI\Models\Imagenet21k();
-$output = $model->predict(__DIR__ . '/sample_data/butterfly.jpg');
+
+###
+# WARNING
+# Centernet Hourglass is currently not working.
+# We might need to upgrade to Tensorflow 2.4
+###
+
+$model = new \FuncAI\Models\CenternetHourglass();
+// Remove the comment from the following lines to enable prediction.
+// CAREFUL: Using images which are too large will crash your machine.
+# $model->printGraph();
+# $output = $model->predict(__DIR__ . '/sample_data/butterfly.jpg');
 var_dump($output);

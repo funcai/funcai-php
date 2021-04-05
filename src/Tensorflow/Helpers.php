@@ -57,10 +57,6 @@ class Helpers {
             }
             $count = $op->numOutputs();
             for ($i = 0; $i < $count; $i++) {
-                if($i > 3) {
-                    echo "etc...\n";
-                    break;
-                }
                 $out = $op->output($i);
                 $num = $out->numConsumers();
                 $s = "";
