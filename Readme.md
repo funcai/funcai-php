@@ -2,6 +2,21 @@
 High performance, state of the art machine learning in php.
 
 ## Available applications
+### 🖼️ Image stylization
+Apply the style of one image to another image
+
+#### Example
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/funcai/funcai-php/main/.github/img/php-ai-image-stylization.jpg" alt="Shows mona lisa and a comic character which combined result in a third image of mona lisa in the style of the comic character" width="766">
+</p>
+
+#### Use it for:
+   - Generating artistic versions of user provided images 
+   - Ensuring a consistent style of cover images
+   - For anonymizing avatars 
+
+### Future applications
 
  - **Image recognition** - Get a label for a given image (in progress)
  - **Image upscaling** - Increase the size of your images (in progress)
@@ -58,7 +73,6 @@ This will output the stylized image to `./out.jpg`.
 
 ## Requirements
  - PHP >= 7.4 on Linux
- - Or use the provided Dockerfile
 
 ### About machine learning
 todo
