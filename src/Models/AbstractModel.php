@@ -11,12 +11,22 @@ abstract class AbstractModel implements ModelInterface
     protected TensorFlow $tf;
     private $session;
 
+    protected static $tensorflow;
+    protected static $_models;
+
     public function __construct()
     {
         if (!extension_loaded("FFI")) {
             throw new TensorflowException("FFI extension required");
         }
-        $this->tf = new TensorFlow();
+        $this->tf = $this->getTensorflow();
+    }
+
+    private function getTensorflow() {
+        if(!self::$tensorflow) {
+            self::$tensorflow = new TensorFlow();
+        }
+        return self::$tensorflow;
     }
 
     /**
@@ -63,7 +73,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function close()
     {
-        if(!$this->session) {
+        if(!self::$_models[$this->getModelPath()]) {
             return;
         }
         $this->getSession()->close();
@@ -76,10 +86,11 @@ abstract class AbstractModel implements ModelInterface
 
     protected function getSession()
     {
-        if(is_null($this->session)) {
-            $this->session = $this->tf->loadSavedModel($this->getModelPath());
+        $modelPath = $this->getModelPath();
+        if(!isset(self::$_models[$modelPath])) {
+            self::$_models[$modelPath] = $this->tf->loadSavedModel($this->getModelPath());
         }
-        return $this->session;
+        return self::$_models[$modelPath];
     }
 
     protected function transformResult($result)

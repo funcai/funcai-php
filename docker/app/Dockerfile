@@ -20,17 +20,6 @@ RUN apt-get update \
         gcc \
         build-essential \
         ca-certificates \
-        ### syslog-ng dependencies
-        libglib2.0-dev \
-        libssl-dev \
-        pkg-config \
-        freetds-bin \
-        freetds-common \
-        freetds-dev \
-        libdbi-dev \
-        libct4 \
-        libsybdb5 \
-        libdbd-mysql \
     && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
     && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
     && export GNUPGHOME="$(mktemp -d)" \
