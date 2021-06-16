@@ -4,11 +4,11 @@ namespace FuncAI\Models;
 use FuncAI\Config;
 use FuncAI\Tensorflow\TensorFlow;
 
-class MobileNetFeatureVector extends AbstractModel
+class BitMR50x1 extends AbstractModel
 {
     public function getModelPath()
     {
-        return Config::getModelBasePath() . '/mobile_net_feature_vector';
+        return Config::getModelBasePath() . '/bit-m-r50x1-feature';
     }
 
     public function getOutputTensor()

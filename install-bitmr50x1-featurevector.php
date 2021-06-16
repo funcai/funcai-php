@@ -5,5 +5,5 @@ require __DIR__.'/../../autoload.php';
 \FuncAI\Config::setLibPath('./tensorflow/');
 \FuncAI\Config::setModelBasePath('./models');
 
-$mobileNetFeatureVectorInstaller = new \FuncAI\Install\MobileNetFeatureVectorInstaller();
-$mobileNetFeatureVectorInstaller->install();
+$bitMR50x1Installer = new \FuncAI\Install\BitMR50x1Installer();
+$bitMR50x1Installer->install();

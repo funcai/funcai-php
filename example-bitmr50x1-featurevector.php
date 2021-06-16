@@ -41,7 +41,7 @@ function similarity(&$a, &$b)
  * A feature vector is basically just an array of floating point numbers which define (in an abstract way) the contents of the image.
  * It's later possible to compare the feature vectors of different images to see if they are similar.
  */
-$model = new \FuncAI\Models\MobileNetFeatureVector();
+$model = new \FuncAI\Models\BitMR50x1();
 $output = $model->predict(__DIR__ . '/sample_data/butterfly.jpg');
 $output2 = $model->predict(__DIR__ . '/sample_data/prince-akachi.jpg');
 

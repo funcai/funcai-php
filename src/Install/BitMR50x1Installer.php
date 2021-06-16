@@ -4,11 +4,11 @@ namespace FuncAI\Install;
 
 use FuncAI\Config;
 use FuncAI\Models\Imagenet21k;
-use FuncAI\Models\MobileNetFeatureVector;
+use FuncAI\Models\BitMR50x1;
 use FuncAI\Models\Stylization;
 use PharData;
 
-class MobileNetFeatureVectorInstaller
+class BitMR50x1Installer
 {
     public function isInstalled()
     {
@@ -26,11 +26,11 @@ class MobileNetFeatureVectorInstaller
         if($this->isInstalled()) {
             return;
         }
-        $model = new MobileNetFeatureVector();
+        $model = new BitMR50x1();
         $installPath = $model->getModelPath();
-        echo "Starting to install the MobileNetFeatureVector model to '$installPath'\n";
+        echo "Starting to install the BitMR50x1 model to '$installPath'\n";
         if($this->isInstalled()) {
-            echo "The MobileNetFeatureVector model is already installed.\n";
+            echo "The BitMR50x1 model is already installed.\n";
             return;
         }
         if(!$this->modelIsInstalled()) {
@@ -43,7 +43,7 @@ class MobileNetFeatureVectorInstaller
 
     private function modelIsInstalled()
     {
-        $model = new MobileNetFeatureVector();
+        $model = new BitMR50x1();
         $requiredFiles = [
             'saved_model.pb',
         ];
@@ -57,7 +57,7 @@ class MobileNetFeatureVectorInstaller
 
     private function installModel()
     {
-        $model = new MobileNetFeatureVector();
+        $model = new BitMR50x1();
         if(!is_dir($model->getModelPath())) {
             mkdir($model->getModelPath(), 0777, true);
         }
@@ -97,7 +97,7 @@ class MobileNetFeatureVectorInstaller
         }
         $phar = new PharData($decompressedPath);
 
-        $model = new MobileNetFeatureVector();
+        $model = new BitMR50x1();
         $modelPath = $model->getModelPath();
 
         $files = [
