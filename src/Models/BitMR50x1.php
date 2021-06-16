@@ -46,7 +46,7 @@ class BitMR50x1 extends AbstractModel
 
     public function getInputLayer()
     {
-        return 'serving_default_inputs';
+        return 'serving_default_input_1';
     }
 
     protected function transformResult($results)
