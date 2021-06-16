@@ -67,10 +67,10 @@ class BitMR50x1Installer
     private function downloadModel()
     {
         echo "Downloading model...\n";
-        $tensorflowLib = 'https://tfhub.dev/google/imagenet/mobilenet_v3_large_100_224/feature_vector/5?tf-hub-format=compressed';
-        $tmpfilePath = sys_get_temp_dir() . '/imagenet_mobilenet_v3_large_100_224_feature_vector_5.tar.gz';
-        $decompressedPath = sys_get_temp_dir() . '/imagenet_mobilenet_v3_large_100_224_feature_vector_5.tar';
-        $extractionPath = sys_get_temp_dir().'/imagenet_mobilenet_v3_large_100_224_feature_vector_5';
+        $tensorflowLib = 'https://tfhub.dev/google/bit/m-r50x1/1?tf-hub-format=compressed';
+        $tmpfilePath = sys_get_temp_dir() . '/bit_m-r50x1_1.tar.gz.tar.gz';
+        $decompressedPath = sys_get_temp_dir() . '/bit_m-r50x1_1.tar.gz.tar';
+        $extractionPath = sys_get_temp_dir().'/bit_m-r50x1_1.tar.gz';
 
         if(!file_exists($tmpfilePath)) {
             $tmpfile = fopen($tmpfilePath, "w");
