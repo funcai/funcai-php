@@ -9,9 +9,8 @@ use FuncAI\TensorFlow\TensorflowException;
 abstract class AbstractModel implements ModelInterface
 {
     protected TensorFlow $tf;
-    private $session;
 
-    protected static $tensorflow;
+    protected $tensorflow;
     protected static $_models;
 
     public function __construct()
@@ -23,10 +22,10 @@ abstract class AbstractModel implements ModelInterface
     }
 
     private function getTensorflow() {
-        if(!self::$tensorflow) {
-            self::$tensorflow = new TensorFlow();
+        if(!$this->tensorflow) {
+            $this->tensorflow = new TensorFlow();
         }
-        return self::$tensorflow;
+        return $this->tensorflow;
     }
 
     /**
