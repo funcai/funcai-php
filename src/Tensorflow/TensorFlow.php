@@ -66,26 +66,22 @@ class TensorFlow
     {
         TensorFlow::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/../../c/tf_singlefile.2.3.0.h"), Config::getLibPath() . "libtensorflow.so.2.3.0");
 
-        #TensorFlow::$ffi->TF_LoadLibrary(Config::getLibPath() . "tf-text.so.2.3.0", $status->c);
         $textLibs = [
-            '_zero_out_ops.so',
-            # 'normalize_ops.so',
-            #'_constrained_sequence_op.so',
-            #'_mst_ops.so',
-            #'_normalize_ops.so',
-            #'_regex_split_ops.so',
-            #'_sentence_breaking_ops.so',
-            #'_sentencepiece_tokenizer.so',
-            #'_split_merge_tokenizer.so',
-            #'_unicode_script_tokenizer.so',
-            #'_whitespace_tokenizer.so',
-            #'_wordpiece_tokenizer.so',
+            'libtensorflow_framework.so.2',
+            '_constrained_sequence_op.so',
+            '_mst_ops.so',
+            '_normalize_ops.so',
+            '_regex_split_ops.so',
+            '_sentence_breaking_ops.so',
+            '_sentencepiece_tokenizer.so',
+            '_split_merge_tokenizer.so',
+            '_unicode_script_tokenizer.so',
+            '_whitespace_tokenizer.so',
+            '_wordpiece_tokenizer.so',
         ];
         foreach($textLibs as $lib) {
             $status = new Status();
             TensorFlow::$ffi->TF_LoadLibrary(Config::getLibPath() . $lib, $status->c);
-            var_dump($status->code());
-            var_dump($status->error());
         }
     }
 

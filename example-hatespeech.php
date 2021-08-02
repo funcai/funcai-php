@@ -20,32 +20,12 @@ require __DIR__.'/vendor/autoload.php';
 \FuncAI\Config::setLibPath(dirname(__FILE__) . '/tensorflow/');
 
 
-function test_shape($val) {
-    $tf = new TensorFlow();
-    $sess = $tf->session();
-
-    $ret = $sess->run(
-        $tf->op("Shape",
-            [$tf->constant($val)]));
-    var_dump($ret->value());
-}
-
-function test_stringJoin() {
-    $tf = new TensorFlow();
-    $sess = $tf->session();
-    $join = $tf->op("ZeroOut", [$tf->constant([[1,2],[3,4]], TensorFlow::INT32)]);
-    $ret = $sess->run($join);
-    var_dump($ret->value());
-}
-
-test_stringJoin();
-exit;
-
 /**
  * Prediction
  * This is a sample prediction which uses the efficientNet model to determine the contents
  * of an image.
  */
 $model = new \FuncAI\Models\Hatespeech();
+#$model->printGraph();
 $output = $model->predict('You fuckin suck');
 var_dump($output);

@@ -14,12 +14,11 @@ class Hatespeech extends AbstractModel
 
     public function getOutputTensor()
     {
-        $output = $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall')->output(0);
-
+        $output = $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall_2')->output(0);
         // Get the top 5 results
-        $topResults = $this->tf->op('TopKV2', [$output, $this->tf->constant(5, TensorFlow::INT32)], [], [], null, 1);
+        // $topResults = $this->tf->op('TopKV2', [$output, $this->tf->constant(5, TensorFlow::INT32)], [], [], null, 1);
 
-        return $topResults;
+        return $output;
     }
 
     public function getInputData($text)
@@ -31,7 +30,7 @@ class Hatespeech extends AbstractModel
 
     public function getInputLayer()
     {
-        return 'serving_default_input_1';
+        return 'serving_default_text';
     }
 
     protected function transformResult($results)
@@ -41,7 +40,7 @@ class Hatespeech extends AbstractModel
 
     private function getLabels($results)
     {
-        print_r($results);
+        var_dump($results);
         return $results;
     }
 }
