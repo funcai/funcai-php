@@ -20,7 +20,11 @@
     },
     "autoload": {
       "psr-4": {
-        "FuncAI\\": "src/"
+        "FuncAI\\": "src/",
+        "Tests\\": "tests/"
       }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
     }
 }

@@ -299,4 +299,8 @@ class Operation
         return (int)TensorFlow::$ffi->TF_OperationNumControlOutputs($this->c);
     }
 
+    public function graph() {
+        return $this->graph;
+    }
+
 }

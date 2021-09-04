@@ -26,6 +26,11 @@ class TensorFlow
     public const UNAVAILABLE = 14;
     public const DATA_LOSS = 15;
 
+    public const LOGGING_LEVEL_DEBUG = 0;
+    public const LOGGING_LEVEL_INFO = 1;
+    public const LOGGING_LEVEL_WARNING = 2;
+    public const LOGGING_LEVEL_ERROR = 3;
+
     public const FLOAT = 1;
     public const DOUBLE = 2;
     public const INT32 = 3;
@@ -57,6 +62,7 @@ class TensorFlow
 
     public function __construct()
     {
+        $this->setLoggingLevel(self::LOGGING_LEVEL_INFO);
         if (is_null(TensorFlow::$ffi)) {
             $this->initializeFFI();
         }
@@ -65,6 +71,29 @@ class TensorFlow
     private function initializeFFI()
     {
         TensorFlow::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/../../c/tf_singlefile.2.3.0.h"), Config::getLibPath() . "libtensorflow.so.2.3.0");
+
+        //$this->loadTensorFlowText();
+    }
+
+    public function loadTensorFlowText()
+    {
+        $textLibs = [
+            'libtensorflow_framework.so.2',
+            '_constrained_sequence_op.so',
+            '_mst_ops.so',
+            '_normalize_ops.so',
+            '_regex_split_ops.so',
+            '_sentence_breaking_ops.so',
+            '_sentencepiece_tokenizer.so',
+            '_split_merge_tokenizer.so',
+            '_unicode_script_tokenizer.so',
+            '_whitespace_tokenizer.so',
+            '_wordpiece_tokenizer.so',
+        ];
+        foreach($textLibs as $lib) {
+            $status = new Status();
+            TensorFlow::$ffi->TF_LoadLibrary(Config::getLibPath() . $lib, $status->c);
+        }
     }
 
     public function version()
@@ -155,5 +184,10 @@ class TensorFlow
         $graph = $this->getDefaultGraph();
         $status = $this->getDefaultStatus();
         return new Session($graph, null, $this->status);
+    }
+
+    public function setLoggingLevel($level)
+    {
+        putenv('TF_CPP_MIN_LOG_LEVEL=' . $level);
     }
 }
