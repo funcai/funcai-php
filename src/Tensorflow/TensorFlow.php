@@ -26,6 +26,11 @@ class TensorFlow
     public const UNAVAILABLE = 14;
     public const DATA_LOSS = 15;
 
+    public const LOGGING_LEVEL_DEBUG = 0;
+    public const LOGGING_LEVEL_INFO = 1;
+    public const LOGGING_LEVEL_WARNING = 2;
+    public const LOGGING_LEVEL_ERROR = 3;
+
     public const FLOAT = 1;
     public const DOUBLE = 2;
     public const INT32 = 3;
@@ -57,6 +62,7 @@ class TensorFlow
 
     public function __construct()
     {
+        $this->setLoggingLevel(self::LOGGING_LEVEL_INFO);
         if (is_null(TensorFlow::$ffi)) {
             $this->initializeFFI();
         }
@@ -173,5 +179,10 @@ class TensorFlow
         $graph = $this->getDefaultGraph();
         $status = $this->getDefaultStatus();
         return new Session($graph, null, $this->status);
+    }
+
+    public function setLoggingLevel($level)
+    {
+        putenv('TF_CPP_MIN_LOG_LEVEL=' . $level);
     }
 }
