@@ -72,6 +72,11 @@ class TensorFlow
     {
         TensorFlow::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/../../c/tf_singlefile.2.3.0.h"), Config::getLibPath() . "libtensorflow.so.2.3.0");
 
+        //$this->loadTensorFlowText();
+    }
+
+    public function loadTensorFlowText()
+    {
         $textLibs = [
             'libtensorflow_framework.so.2',
             '_constrained_sequence_op.so',
