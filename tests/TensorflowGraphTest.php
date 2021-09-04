@@ -1,6 +1,7 @@
 <?php
 namespace Tests;
 
+use FuncAI\Tensorflow\Tensor;
 use FuncAI\Tensorflow\TensorFlow;
 
 final class TensorflowGraphTest extends TensorFlowTestCase
@@ -25,10 +26,14 @@ final class TensorflowGraphTest extends TensorFlowTestCase
         $tf = new TensorFlow();
         $sess = $tf->session();
 
+        $tensor = new Tensor();
+        $tensor->init('Hello');
+        $tensor->value();
+        exit;
+
         $join = $tf->op("StringJoin",
             [[
-                $tf->constant('Hello '),
-                $tf->constant('Wörld')
+                $tf->constant('Hello ')
             ]]);
         $ret = $sess->run($join);
 

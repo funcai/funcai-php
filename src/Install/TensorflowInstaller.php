@@ -30,7 +30,6 @@ class TensorflowInstaller
             return;
         }
         if(!$this->libIsInstalled()) {
-            echo "Installing libtensorflow...\n";
             $this->installLib();
         }
 
@@ -40,7 +39,7 @@ class TensorflowInstaller
     private function libIsInstalled()
     {
         $requiredFiles = [
-            'libtensorflow.so.2.3.0',
+            'libtensorflow.so.2.6.0',
             'libtensorflow_framework.so.2'
         ];
         foreach($requiredFiles as $requiredFile) {
@@ -62,9 +61,9 @@ class TensorflowInstaller
     private function downloadLib()
     {
         echo "Downloading libtensorflow...\n";
-        $tensorflowLib = 'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.3.1.tar.gz';
-        $tmpfilePath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.3.1.tar.gz';
-        $decompressedPath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.3.1.tar';
+        $tensorflowLib = 'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.6.0.tar.gz';
+        $tmpfilePath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.6.0.tar.gz';
+        $decompressedPath = sys_get_temp_dir() . '/libtensorflow-cpu-linux-x86_64-2.6.0.tar';
         $extractionPath = sys_get_temp_dir().'/libtensorflow';
 
         if(!file_exists($tmpfilePath)) {
@@ -93,8 +92,8 @@ class TensorflowInstaller
         $phar = new PharData($decompressedPath);
 
         $files = [
-            './lib/libtensorflow.so.2.3.1' => Config::getLibPath() . '/libtensorflow.so.2.3.0',
-            './lib/libtensorflow_framework.so.2.3.1' => Config::getLibPath() . '/libtensorflow_framework.so.2',
+            './lib/libtensorflow.so.2.6.0' => Config::getLibPath() . '/libtensorflow.so.2.6.0',
+            './lib/libtensorflow_framework.so.2.6.0' => Config::getLibPath() . '/libtensorflow_framework.so.2',
             './LICENSE' => Config::getLibPath() . '/LICENSE',
             './THIRD_PARTY_TF_C_LICENSES' => Config::getLibPath() . '/THIRD_PARTY_TF_C_LICENSES',
         ];
