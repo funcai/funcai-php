@@ -70,6 +70,8 @@ class Tensor
                 foreach($offsets as $k=>$v) {
                     $data->offsets[$k] = $v;
                 }
+                $tensorDataPointer = TensorFlow::$ffi->TF_TensorData($this->c);
+                FFI::memcpy($tensorDataPointer, $tstr, $nbytes);
             } else {
                 $this->_encode($value, $data);
             }
@@ -185,7 +187,7 @@ class Tensor
          */
         $tstr = TensorFlow::$ffi->new("TF_TString[1]");
         TensorFlow::$ffi->TF_StringInit($tstr);
-        TensorFlow::$ffi->TF_StringCopy($tstr, $str, strlen($str));
+        TensorFlow::$ffi->TF_StringCopy($tstr, $str, strlen($str) + 1);
 
         $offset += self::_byteSizeOfEncodedStrings($tstr);
 
@@ -207,16 +209,16 @@ class Tensor
      * @param ? $value an instance of TF_TString
      * @return int
      */
-    private static function _byteSizeOfEncodedStrings($value)
+    private static function _byteSizeOfEncodedStrings($tstr)
     {
-        if (is_array($value)) {
+        if (is_array($tstr)) {
             $size = 0;
-            foreach ($value as $val) {
+            foreach ($tstr as $val) {
                 $size += self::_byteSizeOfEncodedStrings($val);
             }
             return $size;
         } else {
-            return TensorFlow::$ffi->TF_StringGetSize($value);
+            return TensorFlow::$ffi->TF_StringGetSize($tstr);
         }
     }
 
@@ -239,7 +241,7 @@ class Tensor
 
     public function initFromC($cdata)
     {
-        var_dump('maybe we need to update tf_TensorByteSize?');exit;
+        var_dump('maybe we need to update tf_TensorByteSize?');
         if (is_null($this->status)) {
             $this->status = new Status();
         }
@@ -301,17 +303,16 @@ class Tensor
             return $ret;
         }
 
-        $offset = $data->offsets[$dim_offset++];
-        var_dump($this->c);
-        $tstr = TensorFlow::$ffi->cast('TF_TString *', $data->data);
-        $size = TensorFlow::$ffi->TF_StringGetSize($tstr);
-        $res = TensorFlow::$ffi->TF_StringGetDataPointer($tstr);
-        var_dump($res);
-        var_dump($size);
-        exit;
-        $pointer = TensorFlow::$ffi->TF_StringGetDataPointer($this->tstr);
-        var_dump($pointer);
-        exit;
+        #$offset = $data->offsets[$dim_offset++];
+        #$tstr = TensorFlow::$ffi->cast('TF_TString*', $data);
+        #$size = TensorFlow::$ffi->TF_StringGetSize($tstr);
+        $size = 6;
+        # $res = TensorFlow::$ffi->TF_StringGetDataPointer($tstr);
+
+        return substr(FFI::string($data, $size), 1);
+        #var_dump($size);
+        # $pointer = TensorFlow::$ffi->TF_StringGetDataPointer($this->tstr);
+        #var_dump($pointer);
 
         // $dst = TensorFlow::$ffi->new("char*[1]");
         // $dst_len = TensorFlow::$ffi->new("size_t[1]");

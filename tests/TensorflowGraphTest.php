@@ -25,18 +25,13 @@ final class TensorflowGraphTest extends TensorFlowTestCase
     {
         $tf = new TensorFlow();
         $sess = $tf->session();
-
-        $tensor = new Tensor();
-        $tensor->init('Hello');
-        $tensor->value();
-        exit;
-
         $join = $tf->op("StringJoin",
             [[
-                $tf->constant('Hello ')
+                $tf->constant('Hello'),
+                $tf->constant('World'),
             ]]);
         $ret = $sess->run($join);
 
-        $this->assertEquals('Hello Wörld', $ret->value());
+        $this->assertEquals('Hello World', $ret->value());
     }
 }
