@@ -25,6 +25,10 @@ final class TensorflowGraphTest extends TensorFlowTestCase
     {
         $tf = new TensorFlow();
         $sess = $tf->session();
+        $tensor = new Tensor();
+        $tensor->init('Hello');
+        #var_dump($tensor->value());
+        #exit;
         $join = $tf->op("StringJoin",
             [[
                 $tf->constant('Hello'),

@@ -313,7 +313,7 @@ typedef struct TF_TString {  // NOLINT
 
 extern void TF_StringInit(TF_TString *t);
 
-extern void TF_StringCopy(TF_TString *dst, const char *src,
+extern void TF_StringCopy(TF_TString *dst, char *src,
                                          size_t size);
 
 extern void TF_StringAssignView(TF_TString *dst, const char *src,
