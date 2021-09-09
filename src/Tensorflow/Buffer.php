@@ -14,9 +14,9 @@ class Buffer
     {
         if (is_null($str)) {
             $this->c = TensorFlow::$ffi->TF_NewBuffer();
-        } else if (is_object($str) &&
+        } elseif (is_object($str) &&
             $str instanceof CData &&
-            TensorFlow::$ffi->type($str) == TensorFlow::$ffi->type("TF_Buffer*")) {
+            TensorFlow::$ffi->type($str) == TensorFlow::$ffi->type('TF_Buffer*')) {
             $this->c = $str;
         } else {
             $this->c = TensorFlow::$ffi->TF_NewBufferFromString($str, strlen($str));

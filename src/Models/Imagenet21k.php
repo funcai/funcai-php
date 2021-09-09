@@ -1,4 +1,5 @@
 <?php
+
 namespace FuncAI\Models;
 
 use FuncAI\Config;
@@ -48,11 +49,12 @@ class Imagenet21k extends AbstractModel
                 $g = ($rgb >> 8) & 0xFF;
                 $b = $rgb & 0xFF;
                 $idx = ($y * $w * 3) + ($x * 3);
-                $data[$idx] = (float)($r);
-                $data[$idx + 1] = (float)($g);
-                $data[$idx + 2] = (float)($b);
+                $data[$idx] = (float) ($r);
+                $data[$idx + 1] = (float) ($g);
+                $data[$idx + 2] = (float) ($b);
             }
         }
+
         return $ret;
     }
 
@@ -74,7 +76,8 @@ class Imagenet21k extends AbstractModel
     private function getLabels(array $results): array
     {
         $labels = file($this->getModelPath() . '/labels.txt');
-        return array_map(function($idx) use ($labels) {
+
+        return array_map(function ($idx) use ($labels) {
             return trim($labels[$idx + 1]);
         }, $results);
     }

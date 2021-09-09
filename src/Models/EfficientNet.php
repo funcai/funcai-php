@@ -1,4 +1,5 @@
 <?php
+
 namespace FuncAI\Models;
 
 use FuncAI\Config;
@@ -21,7 +22,7 @@ class EfficientNet extends AbstractModel
         // Get the best result
         $topResult = $this->tf->op('Reshape', [
             $this->tf->op('TopKV2', [$output, $this->tf->constant(1, TensorFlow::INT32)], [], [], null, 1),
-            $this->tf->constant([-1])]);
+            $this->tf->constant([-1]), ]);
 
         // See https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a for a list of categories
 
@@ -52,11 +53,12 @@ class EfficientNet extends AbstractModel
                 $g = ($rgb >> 8) & 0xFF;
                 $b = $rgb & 0xFF;
                 $idx = ($y * $w * 3) + ($x * 3);
-                $data[$idx] = (float)($r);
-                $data[$idx + 1] = (float)($g);
-                $data[$idx + 2] = (float)($b);
+                $data[$idx] = (float) ($r);
+                $data[$idx + 1] = (float) ($g);
+                $data[$idx + 2] = (float) ($b);
             }
         }
+
         return $ret;
     }
 
@@ -1074,9 +1076,10 @@ class EfficientNet extends AbstractModel
             998 => 'ear, spike, capitulum',
             999 => 'toilet tissue, toilet paper, bathroom tissue',
         ];
-        if(!isset($labels[$label])) {
+        if (!isset($labels[$label])) {
             return '';
         }
+
         return $labels[$label];
     }
 }

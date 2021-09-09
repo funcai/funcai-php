@@ -1,6 +1,7 @@
 <?php
+
 namespace FuncAI\Applications;
 
-interface TrainingSample {
-
+interface TrainingSample
+{
 }

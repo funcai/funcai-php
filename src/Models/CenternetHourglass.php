@@ -1,4 +1,5 @@
 <?php
+
 namespace FuncAI\Models;
 
 use FuncAI\Config;
@@ -50,6 +51,7 @@ class CenternetHourglass extends AbstractModel
                 $data[$idx + 2] = $b;
             }
         }
+
         return $ret;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace FuncAI\Models;
 
 use FuncAI\Config;
@@ -43,11 +44,12 @@ class BitMR50x1 extends AbstractModel
                 $g = ($rgb >> 8) & 0xFF;
                 $b = $rgb & 0xFF;
                 $idx = ($y * $w * 3) + ($x * 3);
-                $data[$idx] = (float)($r);
-                $data[$idx + 1] = (float)($g);
-                $data[$idx + 2] = (float)($b);
+                $data[$idx] = (float) ($r);
+                $data[$idx + 1] = (float) ($g);
+                $data[$idx + 2] = (float) ($b);
             }
         }
+
         return $ret;
     }
 
@@ -60,5 +62,4 @@ class BitMR50x1 extends AbstractModel
     {
         return $result[0];
     }
-
 }

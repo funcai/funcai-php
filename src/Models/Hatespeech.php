@@ -1,4 +1,5 @@
 <?php
+
 namespace FuncAI\Models;
 
 use FuncAI\Config;
@@ -31,6 +32,7 @@ class Hatespeech extends AbstractModel
     {
         $stringTensor = new Tensor();
         $stringTensor->init([$text], TensorFlow::STRING);
+
         return $stringTensor;
     }
 

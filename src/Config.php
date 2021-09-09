@@ -1,9 +1,11 @@
 <?php
+
 namespace FuncAI;
 
 use Exception;
 
-class Config {
+class Config
+{
     private static string $modelBasePath;
     private static string $libPath;
 
@@ -12,13 +14,14 @@ class Config {
      */
     public static function getModelBasePath(): string
     {
-        if(!isset(self::$modelBasePath)) {
+        if (!isset(self::$modelBasePath)) {
             $basePath = realpath(dirname(__FILE__) . '/../models/');
-            if(!$basePath) {
+            if (!$basePath) {
                 throw new Exception('Could not get real path to the models directory.');
             }
             self::$modelBasePath = $basePath;
         }
+
         return self::$modelBasePath;
     }
 
@@ -45,5 +48,4 @@ class Config {
     {
         self::$libPath = $libPath;
     }
-
 }
