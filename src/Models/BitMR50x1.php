@@ -2,23 +2,30 @@
 namespace FuncAI\Models;
 
 use FuncAI\Config;
+use FuncAI\Tensorflow\Output;
+use FuncAI\Tensorflow\Tensor;
 use FuncAI\Tensorflow\TensorFlow;
+use FuncAI\Tensorflow\TensorflowException;
 
 class BitMR50x1 extends AbstractModel
 {
-    public function getModelPath()
+    public function getModelPath(): string
     {
         return Config::getModelBasePath() . '/bit-m-r50x1-feature';
     }
 
-    public function getOutputTensor()
+    public function getOutputTensor(): Output
     {
-        $output = $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall')->output(0);
-
-        return $output;
+        return $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall')->output(0);
     }
 
-    public function getInputData($imagePath)
+    /**
+     * @param string $imagePath
+     *
+     * @return Tensor
+     * @throws TensorflowException
+     */
+    public function getInputData($imagePath): Tensor
     {
         $img = imagecreatefromjpeg($imagePath);
         // Todo: add black bars to not squish the image
@@ -44,14 +51,14 @@ class BitMR50x1 extends AbstractModel
         return $ret;
     }
 
-    public function getInputLayer()
+    public function getInputLayer(): string
     {
         return 'serving_default_input_1';
     }
 
-    protected function transformResult($results)
+    protected function transformResult($result)
     {
-        return $results[0];
+        return $result[0];
     }
 
 }

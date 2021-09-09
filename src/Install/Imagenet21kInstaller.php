@@ -9,7 +9,7 @@ use PharData;
 
 class Imagenet21kInstaller
 {
-    public function isInstalled()
+    public function isInstalled(): bool
     {
         if(!is_dir(Config::getModelBasePath())) {
             return false;
@@ -20,7 +20,7 @@ class Imagenet21kInstaller
         return true;
     }
 
-    public function install()
+    public function install(): void
     {
         if($this->isInstalled()) {
             return;
@@ -40,7 +40,7 @@ class Imagenet21kInstaller
         echo "\nDone!\n\n";
     }
 
-    private function modelIsInstalled()
+    private function modelIsInstalled(): bool
     {
         $model = new Imagenet21k();
         $requiredFiles = [
@@ -54,7 +54,7 @@ class Imagenet21kInstaller
         return true;
     }
 
-    private function installModel()
+    private function installModel(): void
     {
         $model = new Imagenet21k();
         if(!is_dir($model->getModelPath())) {
@@ -64,7 +64,7 @@ class Imagenet21kInstaller
         $this->downloadLabels();
     }
 
-    private function downloadModel()
+    private function downloadModel(): void
     {
         echo "Downloading model...\n";
         $tensorflowLib = 'https://tfhub.dev/google/bit/m-r50x1/imagenet21k_classification/1?tf-hub-format=compressed';
@@ -118,7 +118,7 @@ class Imagenet21kInstaller
         $this->deleteDirectory($extractionPath);
     }
 
-    private function downloadLabels()
+    private function downloadLabels(): void
     {
         $model = new Imagenet21k();
         $modelPath = $model->getModelPath();
@@ -126,7 +126,7 @@ class Imagenet21kInstaller
         file_put_contents($modelPath . '/labels.txt', $labels);
     }
 
-    private function deleteDirectory($dir) {
+    private function deleteDirectory(string $dir): bool {
         if (!file_exists($dir)) {
             return true;
         }

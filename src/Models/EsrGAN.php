@@ -2,32 +2,35 @@
 namespace FuncAI\Models;
 
 use FuncAI\Config;
+use FuncAI\Tensorflow\Output;
+use FuncAI\Tensorflow\Tensor;
 use FuncAI\Tensorflow\TensorFlow;
+use FuncAI\Tensorflow\TensorflowException;
 
 class EsrGAN extends AbstractModel
 {
-    /**
-     * @var int
-     */
-    private $width;
-    /**
-     * @var int
-     */
-    private $height;
+    private int $width;
+    private int $height;
 
-    public function getModelPath()
+    public function getModelPath(): string
     {
         return Config::getModelBasePath() . '/esrgan';
     }
 
-    public function getOutputTensor()
+    public function getOutputTensor(): Output
     {
         $output = $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall')->output(0);
 
         return $output;
     }
 
-    public function getInputData($imagePath)
+    /**
+     * @param string $imagePath
+     *
+     * @return Tensor
+     * @throws TensorflowException
+     */
+    public function getInputData($imagePath): Tensor
     {
         $img = imagecreatefromjpeg($imagePath);
 
@@ -52,17 +55,21 @@ class EsrGAN extends AbstractModel
         return $ret;
     }
 
-    public function getInputLayer()
+    public function getInputLayer(): string
     {
         return 'serving_default_input_0';
     }
 
     protected function transformResult($result)
     {
-        return $this->saveImage($result);
+        // TODO: return this differently, and/or let the user specify an output path
+        $this->saveImage($result);
     }
 
-    private function saveImage($imageData)
+    /**
+     * @param array<int, array<int, array<int, array<int,int>>>> $imageData
+     */
+    private function saveImage(array $imageData): void
     {
         $imageData = $imageData[0];
         $w = $this->width * 4;

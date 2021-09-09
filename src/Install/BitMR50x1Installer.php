@@ -3,14 +3,12 @@
 namespace FuncAI\Install;
 
 use FuncAI\Config;
-use FuncAI\Models\Imagenet21k;
 use FuncAI\Models\BitMR50x1;
-use FuncAI\Models\Stylization;
 use PharData;
 
 class BitMR50x1Installer
 {
-    public function isInstalled()
+    public function isInstalled(): bool
     {
         if(!is_dir(Config::getModelBasePath())) {
             return false;
@@ -21,7 +19,7 @@ class BitMR50x1Installer
         return true;
     }
 
-    public function install()
+    public function install(): void
     {
         if($this->isInstalled()) {
             return;
@@ -41,7 +39,7 @@ class BitMR50x1Installer
         echo "\nDone!\n\n";
     }
 
-    private function modelIsInstalled()
+    private function modelIsInstalled(): bool
     {
         $model = new BitMR50x1();
         $requiredFiles = [
@@ -55,7 +53,7 @@ class BitMR50x1Installer
         return true;
     }
 
-    private function installModel()
+    private function installModel(): void
     {
         $model = new BitMR50x1();
         if(!is_dir($model->getModelPath())) {
@@ -64,7 +62,7 @@ class BitMR50x1Installer
         $this->downloadModel();
     }
 
-    private function downloadModel()
+    private function downloadModel(): void
     {
         echo "Downloading model...\n";
         $tensorflowLib = 'https://tfhub.dev/google/bit/m-r50x1/1?tf-hub-format=compressed';
@@ -118,7 +116,7 @@ class BitMR50x1Installer
         $this->deleteDirectory($extractionPath);
     }
 
-    private function deleteDirectory($dir) {
+    private function deleteDirectory(string $dir): bool {
         if (!file_exists($dir)) {
             return true;
         }

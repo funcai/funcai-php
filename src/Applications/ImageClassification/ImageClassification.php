@@ -1,23 +1,28 @@
 <?php
 namespace FuncAI\Applications\ImageClassification;
 
+use Exception;
 use FuncAI\Applications\Application;
 use InvalidArgumentException;
 
 class ImageClassification extends Application {
-    public function exportTrainingData(string $exportPath): void {
-        $exportPath = realpath($exportPath) . '/image-classification-export';
-        // TODO: Check if the folder already exists
+    protected string $exportPath = 'image-classification-export';
+    
+    public function exportTrainingData(string $exportPath): string {
+        $exportPath = realpath($exportPath) . '/' . $this->exportPath;
+
         if(!is_dir($exportPath)) {
             if(!@mkdir($exportPath, 0777, true)) {
                 throw new InvalidArgumentException('The export path ' . $exportPath . ' does not exist and can\'t be created. Please create it, or set the correct parent directory permissions.');
             }
+        } else {
+            $this->deleteDirectory($exportPath);
+            mkdir($exportPath);
         }
+        
         if(!is_writable($exportPath)) {
             throw new InvalidArgumentException('The export path ' . $exportPath . ' is not writeable. Please make sure to set the correct directory permissions.');
         }
-        $exportPath = $exportPath . '/image-classification-export';
-        mkdir($exportPath, 0777, true);
 
         $classes = [];
         foreach ($this->trainingSamples as $trainingSample) {
@@ -34,17 +39,50 @@ class ImageClassification extends Application {
             foreach($samples as $i => $sample) {
                 /** @var ImageClassificationTrainingSample $sample */
                 $readStream = fopen($sample->getImagePath(), 'r');
-                $filename = $sample->getImagePath();
-                $expl = explode('.', $filename);
+                $expl = explode('.',$sample->getImagePath());
                 $extension = end($expl);
-                $outputPath = $classDirectory . '/' . $i . '.' . $extension;
-                file_put_contents($outputPath, $readStream);
-                $this->resizeImage($outputPath, 224, 224);
+                $sampleOutputPath = $classDirectory . '/' . $i . '.' . $extension;
+                file_put_contents($sampleOutputPath, $readStream);
+                $this->resizeImage($sampleOutputPath, 224, 224);
             }
         }
+        
+        return $exportPath;
     }
 
-    function resizeImage($sourceImage, $maxWidth, $maxHeight, $quality = 80)
+    /**
+     * @param string $dir
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private function deleteDirectory(string $dir): bool {
+        // Make sure we only delete things that at least contain the export path 
+        if(strpos($dir,$this->exportPath) === false) {
+            throw new Exception('Invalid directory deletion prevented: ' . $dir);
+        }
+        if(!file_exists($dir)) {
+            return true;
+        }
+    
+        if(!is_dir($dir)) {
+            return unlink($dir);
+        }
+    
+        foreach(scandir($dir) as $item) {
+            if($item == '.' || $item == '..') {
+                continue;
+            }
+    
+            if(!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+    
+        return rmdir($dir);
+    }
+
+    private function resizeImage(string $sourceImage, int $maxWidth, int $maxHeight, int $quality = 80): bool
     {
         // Obtain image from given source file.
         if (!$image = @imagecreatefromjpeg($sourceImage))

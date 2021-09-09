@@ -5,8 +5,8 @@ use FuncAI\Applications\TrainingSample;
 
 class ImageClassificationTrainingSample implements TrainingSample
 {
-    private $imagePath;
-    private $class;
+    private string $imagePath;
+    private int $class;
 
     public function __construct(string $imagePath = null, int $class = null) {
         $this->imagePath = $imagePath;

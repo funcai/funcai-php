@@ -2,16 +2,19 @@
 namespace FuncAI\Models;
 
 use FuncAI\Config;
+use FuncAI\Tensorflow\Output;
+use FuncAI\Tensorflow\Tensor;
 use FuncAI\Tensorflow\TensorFlow;
+use FuncAI\Tensorflow\TensorflowException;
 
 class EfficientNet extends AbstractModel
 {
-    public function getModelPath()
+    public function getModelPath(): string
     {
         return Config::getModelBasePath() . '/efficientnet';
     }
 
-    public function getOutputTensor()
+    public function getOutputTensor(): Output
     {
         $output = $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall')->output(0);
 
@@ -25,7 +28,13 @@ class EfficientNet extends AbstractModel
         return $topResult;
     }
 
-    public function getInputData($imagePath)
+    /**
+     * @param string $imagePath
+     *
+     * @return Tensor
+     * @throws TensorflowException
+     */
+    public function getInputData($imagePath): Tensor
     {
         $img = imagecreatefromjpeg($imagePath);
         // Todo: add black bars to not squish the image
@@ -51,7 +60,7 @@ class EfficientNet extends AbstractModel
         return $ret;
     }
 
-    public function getInputLayer()
+    public function getInputLayer(): string
     {
         return 'serving_default_input_1';
     }
@@ -61,7 +70,7 @@ class EfficientNet extends AbstractModel
         return $this->getTextLabel($result[0]);
     }
 
-    private function getTextLabel($label)
+    private function getTextLabel(int $label): string
     {
         $labels = [
             0 => 'tench, Tinca tinca',
@@ -1066,7 +1075,7 @@ class EfficientNet extends AbstractModel
             999 => 'toilet tissue, toilet paper, bathroom tissue',
         ];
         if(!isset($labels[$label])) {
-            return null;
+            return '';
         }
         return $labels[$label];
     }

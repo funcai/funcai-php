@@ -7,7 +7,7 @@ use PharData;
 
 class TensorflowInstaller
 {
-    public function isInstalled()
+    public function isInstalled(): bool
     {
         if(!is_dir(Config::getLibPath())) {
             return false;
@@ -18,7 +18,7 @@ class TensorflowInstaller
         return true;
     }
 
-    public function install()
+    public function install(): void
     {
         if($this->isInstalled()) {
             return;
@@ -37,7 +37,7 @@ class TensorflowInstaller
         echo "\nDone!\n\n";
     }
 
-    private function libIsInstalled()
+    private function libIsInstalled(): bool
     {
         $requiredFiles = [
             'libtensorflow.so.2.3.0',
@@ -51,7 +51,7 @@ class TensorflowInstaller
         return true;
     }
 
-    private function installLib()
+    private function installLib(): void
     {
         if(!is_dir(Config::getLibPath())) {
             mkdir(Config::getLibPath(), 0777, true);
@@ -59,7 +59,7 @@ class TensorflowInstaller
         $this->downloadLib();
     }
 
-    private function downloadLib()
+    private function downloadLib(): void
     {
         echo "Downloading libtensorflow...\n";
         $tensorflowLib = 'https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.3.1.tar.gz';

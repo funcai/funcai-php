@@ -2,9 +2,13 @@
 namespace FuncAI\Applications;
 
 abstract class Application {
-    protected $trainingSamples = [];
+    /**
+     * @var array<int, TrainingSample>
+     */
+    protected array $trainingSamples = [];
 
-    public function addTrainingSample(TrainingSample $sample) {
+    public function addTrainingSample(TrainingSample $sample): self {
         $this->trainingSamples[] = $sample;
+        return $this;
     }
 }

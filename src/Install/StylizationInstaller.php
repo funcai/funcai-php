@@ -8,7 +8,7 @@ use PharData;
 
 class StylizationInstaller
 {
-    public function isInstalled()
+    public function isInstalled(): bool
     {
         if(!is_dir(Config::getModelBasePath())) {
             return false;
@@ -19,7 +19,7 @@ class StylizationInstaller
         return true;
     }
 
-    public function install()
+    public function install(): void
     {
         if($this->isInstalled()) {
             return;
@@ -39,7 +39,7 @@ class StylizationInstaller
         echo "\nDone!\n\n";
     }
 
-    private function modelIsInstalled()
+    private function modelIsInstalled(): bool
     {
         $model = new Stylization();
         $requiredFiles = [
@@ -53,7 +53,7 @@ class StylizationInstaller
         return true;
     }
 
-    private function installModel()
+    private function installModel(): void
     {
         $model = new Stylization();
         if(!is_dir($model->getModelPath())) {
@@ -62,7 +62,7 @@ class StylizationInstaller
         $this->downloadModel();
     }
 
-    private function downloadModel()
+    private function downloadModel(): void
     {
         echo "Downloading model...\n";
         $tensorflowLib = 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2?tf-hub-format=compressed';
@@ -117,7 +117,7 @@ class StylizationInstaller
         #$this->deleteDirectory($extractionPath);
     }
 
-    private function deleteDirectory($dir) {
+    private function deleteDirectory(string $dir): bool {
         if (!file_exists($dir)) {
             return true;
         }
