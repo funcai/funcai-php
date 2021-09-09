@@ -68,14 +68,16 @@ class ImageClassification extends Application {
         if(!is_dir($dir)) {
             return unlink($dir);
         }
-    
-        foreach(scandir($dir) as $item) {
-            if($item == '.' || $item == '..') {
-                continue;
-            }
-    
-            if(!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
+        $entries = scandir($dir);
+        if($entries) {
+            foreach($entries as $item) {
+                if($item == '.' || $item == '..') {
+                    continue;
+                }
+        
+                if(!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                    return false;
+                }
             }
         }
     
@@ -115,7 +117,10 @@ class ImageClassification extends Application {
         $newHeight = (int)$origHeight * $ratio;
 
         // Create final image with new dimensions.
-        $newImage = imagecreatetruecolor($maxWidth, $maxHeight);
+        $newImage = @imagecreatetruecolor($maxWidth, $maxHeight);
+        if(!$newImage) {
+            throw new Exception('Could not create GD image stream. Please make sure GD is installed.');
+        }
         $dstX = 0;
         $dstY = 0;
         if($newWidth > $newHeight) {
