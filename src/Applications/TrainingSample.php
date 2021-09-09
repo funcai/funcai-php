@@ -1,6 +1,6 @@
 <?php
-namespace FuncAI\Applications\TrainingSamples;
+namespace FuncAI\Applications;
 
 interface TrainingSample {
-    
+
 }

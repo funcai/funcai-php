@@ -1,14 +1,14 @@
 <?php
 namespace FuncAI\Applications\ImageClassification;
 
-use FuncAI\Applications\TrainingSamples\TrainingSample;
+use FuncAI\Applications\TrainingSample;
 
 class ImageClassificationTrainingSample implements TrainingSample
 {
     private $imagePath;
     private $class;
 
-    public function __construct($imagePath,$class) {
+    public function __construct(string $imagePath = null, int $class = null) {
         $this->imagePath = $imagePath;
         $this->class = $class;
     }
