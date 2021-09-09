@@ -37,8 +37,61 @@ class ImageClassification extends Application {
                 $filename = $sample->getImagePath();
                 $expl = explode('.', $filename);
                 $extension = end($expl);
-                file_put_contents($classDirectory . '/' . $i . '.' . $extension, $readStream);
+                $outputPath = $classDirectory . '/' . $i . '.' . $extension;
+                file_put_contents($outputPath, $readStream);
+                $this->resizeImage($outputPath, 224, 224);
             }
         }
+    }
+
+    function resizeImage($sourceImage, $maxWidth, $maxHeight, $quality = 80)
+    {
+        // Obtain image from given source file.
+        if (!$image = @imagecreatefromjpeg($sourceImage))
+        {
+            return false;
+        }
+
+        // Get dimensions of source image.
+        list($origWidth, $origHeight) = getimagesize($sourceImage);
+
+        if ($maxWidth == 0)
+        {
+            $maxWidth  = $origWidth;
+        }
+
+        if ($maxHeight == 0)
+        {
+            $maxHeight = $origHeight;
+        }
+
+        // Calculate ratio of desired maximum sizes and original sizes.
+        $widthRatio = $maxWidth / $origWidth;
+        $heightRatio = $maxHeight / $origHeight;
+
+        // Ratio used for calculating new image dimensions.
+        $ratio = min($widthRatio, $heightRatio);
+
+        // Calculate new image dimensions.
+        $newWidth  = (int)$origWidth  * $ratio;
+        $newHeight = (int)$origHeight * $ratio;
+
+        // Create final image with new dimensions.
+        $newImage = imagecreatetruecolor($maxWidth, $maxHeight);
+        $dstX = 0;
+        $dstY = 0;
+        if($newWidth > $newHeight) {
+            $dstY = ($maxHeight - $newHeight) / 2;
+        } else {
+            $dstX = ($maxWidth - $newWidth) / 2;
+        }
+        imagecopyresampled($newImage, $image, $dstX, $dstY, 0, 0, $newWidth, $newHeight, $origWidth, $origHeight);
+        imagejpeg($newImage, $sourceImage, $quality);
+
+        // Free up the memory.
+        imagedestroy($image);
+        imagedestroy($newImage);
+
+        return true;
     }
 }
