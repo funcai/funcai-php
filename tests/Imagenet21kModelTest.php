@@ -13,5 +13,4 @@ final class Imagenet21kModelTest extends TensorFlowTestCase
 
         $this->assertContains('silverspot', $output);
     }
-
 }

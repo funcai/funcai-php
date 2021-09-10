@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use FuncAI\Config;

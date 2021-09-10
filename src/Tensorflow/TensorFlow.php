@@ -1,5 +1,7 @@
 <?php
+
 // The tensorflow classes are inspired by: https://github.com/dstogov/php-tensorflow
+
 namespace FuncAI\Tensorflow;
 
 use Exception;
@@ -70,7 +72,7 @@ class TensorFlow
 
     private function initializeFFI()
     {
-        TensorFlow::$ffi = FFI::cdef(file_get_contents(__DIR__ . "/../../c/tf_singlefile.2.6.0.h"), Config::getLibPath() . "libtensorflow.so.2.6.0");
+        TensorFlow::$ffi = FFI::cdef(file_get_contents(__DIR__ . '/../../c/tf_singlefile.2.6.0.h'), Config::getLibPath() . 'libtensorflow.so.2.6.0');
 
         //$this->loadTensorFlowText();
     }
@@ -90,7 +92,7 @@ class TensorFlow
             '_whitespace_tokenizer.so',
             '_wordpiece_tokenizer.so',
         ];
-        foreach($textLibs as $lib) {
+        foreach ($textLibs as $lib) {
             $status = new Status();
             TensorFlow::$ffi->TF_LoadLibrary(Config::getLibPath() . $lib, $status->c);
         }
@@ -98,7 +100,7 @@ class TensorFlow
 
     public function version()
     {
-        return (string)TensorFlow::$ffi->TF_Version();
+        return (string) TensorFlow::$ffi->TF_Version();
     }
 
     public function getDefaultGraph()
@@ -106,10 +108,11 @@ class TensorFlow
         if (!isset($this->graph)) {
             $this->graph = new Graph();
         }
+
         return $this->graph;
     }
 
-    public function loadSavedModel(string $dir, array $tags = ["serve"], SessionOptions $options = null)
+    public function loadSavedModel(string $dir, array $tags = ['serve'], SessionOptions $options = null)
     {
         if (is_null($options)) {
             $options = new SessionOptions();
@@ -135,13 +138,15 @@ class TensorFlow
             $n_tags,
             $graph->c,
             null, // TF_Buffer* meta_graph_def,
-            $status->c);
+            $status->c
+        );
         for ($i = 0; $i < $n_tags; $i++) {
             FFI::free($c_tags[$i]);
         }
         if ($status->code() != self::OK) {
             throw new Exception($status->error());
         }
+
         return new Session($graph, $options, $status, $c_session);
     }
 
@@ -150,6 +155,7 @@ class TensorFlow
         if (!isset($this->status)) {
             $this->status = new Status();
         }
+
         return $this->status;
     }
 
@@ -158,6 +164,7 @@ class TensorFlow
         $status = $this->getDefaultStatus();
         $tensor = new Tensor();
         $tensor->init($value, $dataType, $shape, $status);
+
         return $tensor;
     }
 
@@ -166,9 +173,10 @@ class TensorFlow
         $status = $this->getDefaultStatus();
         $tensor = new Tensor();
         $tensor->init($value, $dataType, $shape, $status);
-        return $this->op("Const", [], [], [
-            "dtype" => new Type($tensor->type()),
-            "value" => $tensor,
+
+        return $this->op('Const', [], [], [
+            'dtype' => new Type($tensor->type()),
+            'value' => $tensor,
         ], $name);
     }
 
@@ -176,6 +184,7 @@ class TensorFlow
     {
         $graph = $this->getDefaultGraph();
         $op = $graph->addOperation($type, $name, $input, $control, $attr);
+
         return $op->output($n);
     }
 
@@ -183,6 +192,7 @@ class TensorFlow
     {
         $graph = $this->getDefaultGraph();
         $status = $this->getDefaultStatus();
+
         return new Session($graph, null, $this->status);
     }
 

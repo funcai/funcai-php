@@ -9,30 +9,32 @@ use PharData;
 
 class Imagenet21kInstaller
 {
-    public function isInstalled()
+    public function isInstalled(): bool
     {
-        if(!is_dir(Config::getModelBasePath())) {
+        if (!is_dir(Config::getModelBasePath())) {
             return false;
         }
-        if(!$this->modelIsInstalled()) {
+        if (!$this->modelIsInstalled()) {
             return false;
         }
+
         return true;
     }
 
-    public function install()
+    public function install(): void
     {
-        if($this->isInstalled()) {
+        if ($this->isInstalled()) {
             return;
         }
         $model = new Imagenet21k();
         $installPath = $model->getModelPath();
         echo "Starting to install the Imagenet21k model to '$installPath'\n";
-        if($this->isInstalled()) {
+        if ($this->isInstalled()) {
             echo "The Imagenet21k model is already installed.\n";
+
             return;
         }
-        if(!$this->modelIsInstalled()) {
+        if (!$this->modelIsInstalled()) {
             echo "Installing model...\n";
             $this->installModel();
         }
@@ -40,46 +42,47 @@ class Imagenet21kInstaller
         echo "\nDone!\n\n";
     }
 
-    private function modelIsInstalled()
+    private function modelIsInstalled(): bool
     {
         $model = new Imagenet21k();
         $requiredFiles = [
             'saved_model.pb',
         ];
-        foreach($requiredFiles as $requiredFile) {
-            if(!file_exists($model->getModelPath() . '/' . $requiredFile)) {
+        foreach ($requiredFiles as $requiredFile) {
+            if (!file_exists($model->getModelPath() . '/' . $requiredFile)) {
                 return false;
             }
         }
+
         return true;
     }
 
-    private function installModel()
+    private function installModel(): void
     {
         $model = new Imagenet21k();
-        if(!is_dir($model->getModelPath())) {
+        if (!is_dir($model->getModelPath())) {
             mkdir($model->getModelPath(), 0777, true);
         }
         $this->downloadModel();
         $this->downloadLabels();
     }
 
-    private function downloadModel()
+    private function downloadModel(): void
     {
         echo "Downloading model...\n";
         $tensorflowLib = 'https://tfhub.dev/google/bit/m-r50x1/imagenet21k_classification/1?tf-hub-format=compressed';
         $tmpfilePath = sys_get_temp_dir() . '/bit-m-r50x1.tar.gz';
         $decompressedPath = sys_get_temp_dir() . '/bit-m-r50x1.tar';
-        $extractionPath = sys_get_temp_dir().'/bit-m-r50x1';
+        $extractionPath = sys_get_temp_dir() . '/bit-m-r50x1';
 
-        if(!file_exists($tmpfilePath)) {
-            $tmpfile = fopen($tmpfilePath, "w");
-            $options = array(
+        if (!file_exists($tmpfilePath)) {
+            $tmpfile = fopen($tmpfilePath, 'w');
+            $options = [
                 CURLOPT_FILE => $tmpfile,
                 CURLOPT_URL => $tensorflowLib,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_FAILONERROR => true,
-            );
+            ];
 
             $handle = curl_init();
             curl_setopt_array($handle, $options);
@@ -91,7 +94,7 @@ class Imagenet21kInstaller
             }
         }
 
-        if(!file_exists($decompressedPath)) {
+        if (!file_exists($decompressedPath)) {
             $phar = new PharData($tmpfilePath);
             $phar->decompress();
         }
@@ -105,12 +108,12 @@ class Imagenet21kInstaller
             './variables/variables.data-00000-of-00001' => $modelPath . '/variables/variables.data-00000-of-00001',
             './variables/variables.index' => $modelPath . '/variables/variables.index',
         ];
-        foreach($files as $from => $to) {
-            if(!is_dir(dirname($to))) {
+        foreach ($files as $from => $to) {
+            if (!is_dir(dirname($to))) {
                 mkdir(dirname($to), 0777, true);
             }
             $phar->extractTo($extractionPath, $from);
-            rename(realpath($extractionPath. '/' . $from), $to);
+            rename(realpath($extractionPath . '/' . $from), $to);
         }
 
         unlink($tmpfilePath);
@@ -118,7 +121,7 @@ class Imagenet21kInstaller
         $this->deleteDirectory($extractionPath);
     }
 
-    private function downloadLabels()
+    private function downloadLabels(): void
     {
         $model = new Imagenet21k();
         $modelPath = $model->getModelPath();
@@ -126,7 +129,8 @@ class Imagenet21kInstaller
         file_put_contents($modelPath . '/labels.txt', $labels);
     }
 
-    private function deleteDirectory($dir) {
+    private function deleteDirectory(string $dir): bool
+    {
         if (!file_exists($dir)) {
             return true;
         }
@@ -143,7 +147,6 @@ class Imagenet21kInstaller
             if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
-
         }
 
         return rmdir($dir);

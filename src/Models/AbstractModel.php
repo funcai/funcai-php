@@ -3,44 +3,49 @@
 namespace FuncAI\Models;
 
 use FuncAI\Tensorflow\Helpers;
+use FuncAI\Tensorflow\Session;
 use FuncAI\Tensorflow\TensorFlow;
-use FuncAI\TensorFlow\TensorflowException;
+use FuncAI\Tensorflow\TensorflowException;
 
 abstract class AbstractModel implements ModelInterface
 {
     protected TensorFlow $tf;
 
-    protected $tensorflow;
-    protected static $_models;
+    protected TensorFlow $tensorflow;
+
+    /** @var array<string, Session> */
+    protected static array $_models;
 
     public function __construct()
     {
-        if (!extension_loaded("FFI")) {
-            throw new TensorflowException("FFI extension required");
+        if (!extension_loaded('FFI')) {
+            throw new TensorflowException('FFI extension required');
         }
         $this->tf = $this->getTensorflow();
     }
 
-    private function getTensorflow() {
-        if(!$this->tensorflow) {
+    private function getTensorflow(): TensorFlow
+    {
+        if (!isset($this->tensorflow)) {
             $this->tensorflow = new TensorFlow();
         }
+
         return $this->tensorflow;
     }
 
     /**
      * Preloads the model into memory
-     * Do this for example after you've started your queue worker
+     * Do this for example after you've started your queue worker.
      */
-    public function boot()
+    public function boot(): void
     {
         $this->getSession();
     }
 
     /**
-     * Runs the model to return the predicted output
+     * Runs the model to return the predicted output.
      *
-     * @param $input
+     * @param mixed $input
      * @return mixed
      * @throws TensorflowException
      */
@@ -53,7 +58,7 @@ abstract class AbstractModel implements ModelInterface
         $output = $this->getOutputTensor();
 
         $inputData = $this->getInputData($input);
-        if(!is_array($inputData)) {
+        if (!is_array($inputData)) {
             $inputData = [$this->getInputLayer() => $inputData];
         }
 
@@ -66,38 +71,44 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Cleanup memory
+     * Cleanup memory.
      *
      * @throws TensorflowException
      */
-    public function close()
+    public function close(): void
     {
-        if(!self::$_models[$this->getModelPath()]) {
+        if (!isset(self::$_models[$this->getModelPath()])) {
             return;
         }
         $this->getSession()->close();
     }
 
-    public function printGraph()
+    public function printGraph(): void
     {
         Helpers::printGraph($this->getSession()->getGraph());
     }
 
-    protected function getSession()
+    protected function getSession(): Session
     {
         $modelPath = $this->getModelPath();
-        if(!isset(self::$_models[$modelPath])) {
+        if (!isset(self::$_models[$modelPath])) {
             self::$_models[$modelPath] = $this->tf->loadSavedModel($this->getModelPath());
         }
+
         return self::$_models[$modelPath];
     }
 
+    /**
+     * @param mixed $result
+     *
+     * @return mixed
+     */
     protected function transformResult($result)
     {
         return $result;
     }
 
-    public function getInputLayer()
+    public function getInputLayer(): string
     {
         return '';
     }
