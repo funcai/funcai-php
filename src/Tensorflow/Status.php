@@ -1,4 +1,5 @@
 <?php
+
 // The tensorflow classes are inspired by: https://github.com/dstogov/php-tensorflow
 
 namespace FuncAI\Tensorflow;
@@ -19,7 +20,7 @@ class Status
 
     public function code()
     {
-        return (int)TensorFlow::$ffi->TF_GetCode($this->c);
+        return (int) TensorFlow::$ffi->TF_GetCode($this->c);
     }
 
     public function error()
@@ -29,6 +30,6 @@ class Status
 
     public function string()
     {
-        return (string)TensorFlow::$ffi->TF_Message($this->c);
+        return (string) TensorFlow::$ffi->TF_Message($this->c);
     }
 }

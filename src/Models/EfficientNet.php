@@ -1,31 +1,41 @@
 <?php
+
 namespace FuncAI\Models;
 
 use FuncAI\Config;
+use FuncAI\Tensorflow\Output;
+use FuncAI\Tensorflow\Tensor;
 use FuncAI\Tensorflow\TensorFlow;
+use FuncAI\Tensorflow\TensorflowException;
 
 class EfficientNet extends AbstractModel
 {
-    public function getModelPath()
+    public function getModelPath(): string
     {
         return Config::getModelBasePath() . '/efficientnet';
     }
 
-    public function getOutputTensor()
+    public function getOutputTensor(): Output
     {
         $output = $this->tf->getDefaultGraph()->operation('StatefulPartitionedCall')->output(0);
 
         // Get the best result
         $topResult = $this->tf->op('Reshape', [
             $this->tf->op('TopKV2', [$output, $this->tf->constant(1, TensorFlow::INT32)], [], [], null, 1),
-            $this->tf->constant([-1])]);
+            $this->tf->constant([-1]), ]);
 
         // See https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a for a list of categories
 
         return $topResult;
     }
 
-    public function getInputData($imagePath)
+    /**
+     * @param string $imagePath
+     *
+     * @return Tensor
+     * @throws TensorflowException
+     */
+    public function getInputData($imagePath): Tensor
     {
         $img = imagecreatefromjpeg($imagePath);
         // Todo: add black bars to not squish the image
@@ -43,15 +53,16 @@ class EfficientNet extends AbstractModel
                 $g = ($rgb >> 8) & 0xFF;
                 $b = $rgb & 0xFF;
                 $idx = ($y * $w * 3) + ($x * 3);
-                $data[$idx] = (float)($r);
-                $data[$idx + 1] = (float)($g);
-                $data[$idx + 2] = (float)($b);
+                $data[$idx] = (float) ($r);
+                $data[$idx + 1] = (float) ($g);
+                $data[$idx + 2] = (float) ($b);
             }
         }
+
         return $ret;
     }
 
-    public function getInputLayer()
+    public function getInputLayer(): string
     {
         return 'serving_default_input_1';
     }
@@ -61,7 +72,7 @@ class EfficientNet extends AbstractModel
         return $this->getTextLabel($result[0]);
     }
 
-    private function getTextLabel($label)
+    private function getTextLabel(int $label): string
     {
         $labels = [
             0 => 'tench, Tinca tinca',
@@ -1065,9 +1076,10 @@ class EfficientNet extends AbstractModel
             998 => 'ear, spike, capitulum',
             999 => 'toilet tissue, toilet paper, bathroom tissue',
         ];
-        if(!isset($labels[$label])) {
-            return null;
+        if (!isset($labels[$label])) {
+            return '';
         }
+
         return $labels[$label];
     }
 }

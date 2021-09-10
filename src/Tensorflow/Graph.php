@@ -25,12 +25,13 @@ class Graph
         }
         $op = new Operation($this);
         $op->initFromC($cdata);
+
         return $op;
     }
 
     public function operations()
     {
-        $pos = TensorFlow::$ffi->new("size_t[1]");
+        $pos = TensorFlow::$ffi->new('size_t[1]');
         $pos[0] = 0;
         $ops = [];
         while (1) {
@@ -42,6 +43,7 @@ class Graph
             $op->initFromC($cdata);
             $ops[] = $op;
         }
+
         return $ops;
     }
 
@@ -49,11 +51,12 @@ class Graph
     {
         if (is_null($name)) {
             $name = $this->_genName($type);
-        } else if (!is_null(TensorFlow::$ffi->TF_GraphOperationByName($this->c, $name))) {
+        } elseif (!is_null(TensorFlow::$ffi->TF_GraphOperationByName($this->c, $name))) {
             $name = $this->_genName($name);
         }
         $op = new Operation($this);
         $op->init($this, $type, $name, $input, $control, $attr);
+
         return $op;
     }
 
@@ -65,7 +68,8 @@ class Graph
             $this->nameNum[$name] = 1;
             $num = 1;
         }
-        return $name . "_" . $num;
+
+        return $name . '_' . $num;
     }
 
     public function export()
@@ -76,10 +80,11 @@ class Graph
         if ($status->code() != TensorFlow::OK) {
             throw new TensorflowException($status->error());
         }
+
         return $buf->string();
     }
 
-    public function import(string $def, string $prefix = "")
+    public function import(string $def, string $prefix = '')
     {
         $opts = new ImportGraphDefOptions();
         $opts->setPrefix($prefix);

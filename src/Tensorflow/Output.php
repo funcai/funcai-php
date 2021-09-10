@@ -1,4 +1,5 @@
 <?php
+
 // The tensorflow classes are inspired by: https://github.com/dstogov/php-tensorflow
 
 namespace FuncAI\Tensorflow;
@@ -15,7 +16,7 @@ class Output
 
     public function init(Operation $operation, int $index)
     {
-        $this->c = TensorFlow::$ffi->new("TF_Output");
+        $this->c = TensorFlow::$ffi->new('TF_Output');
         $this->c->oper = $operation->c;
         $this->c->index = $index;
     }
@@ -29,6 +30,7 @@ class Output
     {
         $op = new Operation($this->graph);
         $op->initFromC($this->c->oper);
+
         return $op;
     }
 
@@ -44,7 +46,7 @@ class Output
 
     public function type()
     {
-        return (int)TensorFlow::$ffi->TF_OperationOutputType($this->c);
+        return (int) TensorFlow::$ffi->TF_OperationOutputType($this->c);
     }
 
     public function shape()
@@ -57,8 +59,13 @@ class Output
         $ret = null;
         if ($ndims >= 0) {
             $buf = TensorFlow::$ffi->new("int64_t[$ndims]");
-            TensorFlow::$ffi->TF_GraphGetTensorShape($this->graph->c, $this->c,
-                $buf, $ndims, $status->c);
+            TensorFlow::$ffi->TF_GraphGetTensorShape(
+                $this->graph->c,
+                $this->c,
+                $buf,
+                $ndims,
+                $status->c
+            );
             if ($status->code() != TensorFlow::OK) {
                 throw new TensorflowException($status->error());
             }
@@ -67,6 +74,7 @@ class Output
                 $ret[$i] = $buf[$i];
             }
         }
+
         return $ret;
     }
 
@@ -88,9 +96,11 @@ class Output
                     $in->initFromC(clone $buf[$i]);
                     $ret[] = $in;
                 }
+
                 return $ret;
             }
         }
+
         return [];
     }
 }

@@ -12,8 +12,8 @@ class Operation
 
     public function __construct(Graph $graph)
     {
-        if(is_null(self::$operation_ptr)) {
-            self::$operation_ptr = TensorFlow::$ffi->type("TF_Operation*");
+        if (is_null(self::$operation_ptr)) {
+            self::$operation_ptr = TensorFlow::$ffi->type('TF_Operation*');
         }
         $this->graph = $graph;
     }
@@ -26,7 +26,7 @@ class Operation
         foreach ($input as $in) {
             if ($in instanceof Output) {
                 TensorFlow::$ffi->TF_AddInput($desc, $in->c);
-            } else if (is_array($in)) {
+            } elseif (is_array($in)) {
                 $n_inputs = count($in);
                 $c_inputs = TensorFlow::$ffi->new("TF_Output[$n_inputs]");
                 $i = 0;
@@ -45,33 +45,35 @@ class Operation
         foreach ($attr as $key => $val) {
             if (is_string($val)) {
                 TensorFlow::$ffi->TF_SetAttrString($desc, $key, $val, strlen($val));
-            } else if (is_int($val)) {
+            } elseif (is_int($val)) {
                 TensorFlow::$ffi->TF_SetAttrInt($desc, $key, $val);
-            } else if (is_float($val)) {
+            } elseif (is_float($val)) {
                 TensorFlow::$ffi->TF_SetAttrFloat($desc, $key, $val);
-            } else if (is_bool($val)) {
+            } elseif (is_bool($val)) {
                 TensorFlow::$ffi->TF_SetAttrBool($desc, $key, $val);
-            } else if (is_object($val) && $val instanceof Type) {
+            } elseif (is_object($val) && $val instanceof Type) {
                 TensorFlow::$ffi->TF_SetAttrType($desc, $key, $val->type);
-            } else if (is_object($val) && $val instanceof FuncName) {
+            } elseif (is_object($val) && $val instanceof FuncName) {
                 TensorFlow::$ffi->TF_SetAttrFuncName($desc, $key, $val->func_name, strlen($val->func_name));
-            } else if (is_object($val) && $val instanceof Shape) {
+            } elseif (is_object($val) && $val instanceof Shape) {
                 $shape = $val->shape;
                 $num_dims = count($shape);
                 $dims = TensorFlow::$ffi->new("int64_t[$num_dims]");
                 $j = 0;
                 foreach ($shape as $dim) {
-                    $dims[$j++] = (int)$dim;
+                    $dims[$j++] = (int) $dim;
                 }
                 TensorFlow::$ffi->TF_SetAttrShape($desc, $key, $dims, $num_dims);
-            } else if (is_object($val) && $val instanceof Tensor) {
+            } elseif (is_object($val) && $val instanceof Tensor) {
                 TensorFlow::$ffi->TF_SetAttrTensor($desc, $key, $val->c, $status->c);
                 if ($status->code() != TensorFlow::OK) {
                     throw new TensorflowException($status->error());
                 }
-            } else if (is_array($val) && count($val) > 0) {
+            } elseif (is_array($val) && count($val) > 0) {
                 $num = count($val);
-                foreach ($val as $el) break;
+                foreach ($val as $el) {
+                    break;
+                }
                 if (is_string($el)) {
                     $buf = TensorFlow::$ffi->new("char*[$num]");
                     $len = TensorFlow::$ffi->new("size_t[$num]");
@@ -82,55 +84,55 @@ class Operation
                             $len[$i] = strlen($el);
                             $i++;
                         } else {
-                            throw new TensorflowException("Wrong attr type");
+                            throw new TensorflowException('Wrong attr type');
                         }
                     }
                     TensorFlow::$ffi->TF_SetAttrStringList($desc, $key, $buf, $len, $num);
-                } else if (is_int($el)) {
+                } elseif (is_int($el)) {
                     $buf = TensorFlow::$ffi->new("int64_t[$num]");
                     $i = 0;
                     foreach ($val as $el) {
                         if (is_int($el)) {
                             $buf[$i++] = $el;
                         } else {
-                            throw new TensorflowException("Wrong attr type");
+                            throw new TensorflowException('Wrong attr type');
                         }
                     }
                     TensorFlow::$ffi->TF_SetAttrIntList($desc, $key, $buf, $num);
-                } else if (is_float($el)) {
+                } elseif (is_float($el)) {
                     $buf = TensorFlow::$ffi->new("float[$num]");
                     $i = 0;
                     foreach ($val as $el) {
                         if (is_float($el)) {
                             $buf[$i++] = $el;
                         } else {
-                            throw new TensorflowException("Wrong attr type");
+                            throw new TensorflowException('Wrong attr type');
                         }
                     }
                     TensorFlow::$ffi->TF_SetAttrFloatList($desc, $key, $buf, $num);
-                } else if (is_bool($el)) {
+                } elseif (is_bool($el)) {
                     $buf = TensorFlow::$ffi->new("unsigned char[$num]");
                     $i = 0;
                     foreach ($val as $el) {
                         if (is_bool($el)) {
                             $buf[$i++] = $el;
                         } else {
-                            throw new TensorflowException("Wrong attr type");
+                            throw new TensorflowException('Wrong attr type');
                         }
                     }
                     TensorFlow::$ffi->TF_SetAttrBoolList($desc, $key, $buf, $num);
-                } else if (is_object($el) && $el instanceof Type) {
+                } elseif (is_object($el) && $el instanceof Type) {
                     $buf = TensorFlow::$ffi->new("TF_DataType[$num]");
                     $i = 0;
                     foreach ($val as $el) {
                         if ($el instanceof Type) {
                             $buf[$i++] = $el->type;
                         } else {
-                            throw new TensorflowException("Wrong attr type");
+                            throw new TensorflowException('Wrong attr type');
                         }
                     }
                     TensorFlow::$ffi->TF_SetAttrTypeList($desc, $key, $buf, $num);
-                } else if (is_object($el) && $el instanceof Shape) {
+                } elseif (is_object($el) && $el instanceof Shape) {
                     $buf = TensorFlow::$ffi->new("int64_t*[$num]");
                     $len = TensorFlow::$ffi->new("int[$num]");
                     $i = 0;
@@ -141,24 +143,24 @@ class Operation
                             $dims = TensorFlow::$ffi->new("int64_t[$num_dims]");
                             $j = 0;
                             foreach ($shape as $dim) {
-                                $dims[$j++] = (int)$dim;
+                                $dims[$j++] = (int) $dim;
                             }
                             $buf[$i] = $dims;
                             $len[$i] = $num_dims;
                             $i++;
                         } else {
-                            throw new TensorflowException("Wrong attr type");
+                            throw new TensorflowException('Wrong attr type');
                         }
                     }
                     TensorFlow::$ffi->TF_SetAttrShapeList($desc, $key, $buf, $len, $num);
-                } else if (is_object($el) && $el instanceof Tensor) {
+                } elseif (is_object($el) && $el instanceof Tensor) {
                     $buf = TensorFlow::$ffi->new("TF_Tensor*[$num]");
                     $i = 0;
                     foreach ($val as $el) {
                         if ($el instanceof Tensor) {
                             $buf[$i++] = $el->type;
                         } else {
-                            throw new TensorflowException("Wrong attr type");
+                            throw new TensorflowException('Wrong attr type');
                         }
                     }
                     TensorFlow::$ffi->TF_SetAttrTensorList($desc, $key, $buf, $num, $status->c);
@@ -166,17 +168,17 @@ class Operation
                         throw new TensorflowException($status->error());
                     }
                 } else {
-                    throw new TensorflowException("Unknown Operation attr type");
+                    throw new TensorflowException('Unknown Operation attr type');
                 }
             } else {
-                throw new TensorflowException("Unknown Operation attr type");
+                throw new TensorflowException('Unknown Operation attr type');
             }
         }
 
         if (is_string($device)) {
             TensorFlow::$ffi->TF_SetDevice($desc, $device);
-        } else if (!is_null($device)) {
-            throw new TensorflowException("Wrong Operation device");
+        } elseif (!is_null($device)) {
+            throw new TensorflowException('Wrong Operation device');
         }
 
         $this->c = TensorFlow::$ffi->TF_FinishOperation($desc, $status->c);
@@ -187,46 +189,48 @@ class Operation
 
     public function name()
     {
-        return (string)TensorFlow::$ffi->TF_OperationName($this->c);
+        return (string) TensorFlow::$ffi->TF_OperationName($this->c);
     }
 
     public function type()
     {
-        return (string)TensorFlow::$ffi->TF_OperationOpType($this->c);
+        return (string) TensorFlow::$ffi->TF_OperationOpType($this->c);
     }
 
     public function device()
     {
-        return (string)TensorFlow::$ffi->TF_OperationDevice($this->c);
+        return (string) TensorFlow::$ffi->TF_OperationDevice($this->c);
     }
 
     public function numInputs()
     {
-        return (int)TensorFlow::$ffi->TF_OperationNumInputs($this->c);
+        return (int) TensorFlow::$ffi->TF_OperationNumInputs($this->c);
     }
 
     public function numOutputs()
     {
-        return (int)TensorFlow::$ffi->TF_OperationNumOutputs($this->c);
+        return (int) TensorFlow::$ffi->TF_OperationNumOutputs($this->c);
     }
 
     public function inputListSize($name)
     {
         $status = new Status();
-        $ret = (int)TensorFlow::$ffi->TF_OperationInputListLength($this->c, $name, $status->c);
+        $ret = (int) TensorFlow::$ffi->TF_OperationInputListLength($this->c, $name, $status->c);
         if ($status->code() != TensorFlow::OK) {
             throw new TensorflowException($status->error());
         }
+
         return $ret;
     }
 
     public function outputListSize($name)
     {
         $status = new Status();
-        $ret = (int)TensorFlow::$ffi->TF_OperationOutputListLength($this->c, $name, $status->c);
+        $ret = (int) TensorFlow::$ffi->TF_OperationOutputListLength($this->c, $name, $status->c);
         if ($status->code() != TensorFlow::OK) {
             throw new TensorflowException($status->error());
         }
+
         return $ret;
     }
 
@@ -234,6 +238,7 @@ class Operation
     {
         $input = new Input($this->graph);
         $input->init($this, $n);
+
         return $input;
     }
 
@@ -241,6 +246,7 @@ class Operation
     {
         $output = new Output($this->graph);
         $output->init($this, $n);
+
         return $output;
     }
 
@@ -258,15 +264,17 @@ class Operation
                     $in->initFromC(clone $buf[$i]);
                     $ret[] = $in;
                 }
+
                 return $ret;
             }
         }
+
         return [];
     }
 
     public function numControlInputs()
     {
-        return (int)TensorFlow::$ffi->TF_OperationNumControlInputs($this->c);
+        return (int) TensorFlow::$ffi->TF_OperationNumControlInputs($this->c);
     }
 
     public function initFromC($cdata)
@@ -288,19 +296,21 @@ class Operation
                     $in->initFromC(clone $buf[$i]);
                     $ret[] = $in;
                 }
+
                 return $ret;
             }
         }
+
         return [];
     }
 
     public function numControlOutputs()
     {
-        return (int)TensorFlow::$ffi->TF_OperationNumControlOutputs($this->c);
+        return (int) TensorFlow::$ffi->TF_OperationNumControlOutputs($this->c);
     }
 
-    public function graph() {
+    public function graph()
+    {
         return $this->graph;
     }
-
 }

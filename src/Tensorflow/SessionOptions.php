@@ -13,12 +13,12 @@ class SessionOptions
 
     public static function setTarget()
     {
-        throw new TensorflowException("Not Implemented"); //???
+        throw new TensorflowException('Not Implemented'); //???
     }
 
     public static function setConfig()
     {
-        throw new TensorflowException("Not Implemented"); //???
+        throw new TensorflowException('Not Implemented'); //???
     }
 
     public function __destruct()

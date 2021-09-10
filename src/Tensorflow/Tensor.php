@@ -1,4 +1,5 @@
 <?php
+
 // The tensorflow classes are inspired by: https://github.com/dstogov/php-tensorflow
 
 namespace FuncAI\Tensorflow;
@@ -78,14 +79,14 @@ class Tensor
         }
         if (is_int($value)) {
             return PHP_INT_SIZE == 4 ? TensorFlow::INT32 : TensorFlow::INT64;
-        } else if (is_double($value)) {
+        } elseif (is_double($value)) {
             return TensorFlow::DOUBLE;
-        } else if (is_bool($value)) {
+        } elseif (is_bool($value)) {
             return TensorFlow::BOOL;
-        } else if (is_string($value)) {
+        } elseif (is_string($value)) {
             return TensorFlow::STRING;
         } else {
-            throw new TensorflowException("Cannot guess type");
+            throw new TensorflowException('Cannot guess type');
         }
     }
 
@@ -97,6 +98,7 @@ class Tensor
                 return self::_guessShape($val, $shape);
             }
         }
+
         return $shape;
     }
 
@@ -107,9 +109,11 @@ class Tensor
             foreach ($value as $val) {
                 $size += self::_byteSizeOfEncodedStrings($val);
             }
+
             return $size;
         } else {
-            $val = (string)$value;
+            $val = (string) $value;
+
             return TensorFlow::$ffi->TF_StringEncodedSize(strlen($val));
         }
     }
@@ -117,43 +121,46 @@ class Tensor
     public function data()
     {
         static $map = [
-            TensorFlow::FLOAT => "float",
-            TensorFlow::DOUBLE => "double",
-            TensorFlow::INT32 => "int32_t",
-            TensorFlow::UINT8 => "uint8_t",
-            TensorFlow::INT16 => "int16_t",
-            TensorFlow::INT8 => "int8_t",
+            TensorFlow::FLOAT => 'float',
+            TensorFlow::DOUBLE => 'double',
+            TensorFlow::INT32 => 'int32_t',
+            TensorFlow::UINT8 => 'uint8_t',
+            TensorFlow::INT16 => 'int16_t',
+            TensorFlow::INT8 => 'int8_t',
             TensorFlow::COMPLEX64 => null,
             TensorFlow::COMPLEX => null,
-            TensorFlow::INT64 => "int64_t",
-            TensorFlow::BOOL => "bool",
+            TensorFlow::INT64 => 'int64_t',
+            TensorFlow::BOOL => 'bool',
             TensorFlow::QINT8 => null,
             TensorFlow::QUINT8 => null,
             TensorFlow::QINT32 => null,
             TensorFlow::BFLOAT16 => null,
             TensorFlow::QINT16 => null,
             TensorFlow::QUINT16 => null,
-            TensorFlow::UINT16 => "uint16_t",
+            TensorFlow::UINT16 => 'uint16_t',
             TensorFlow::COMPLEX128 => null,
             TensorFlow::HALF => null,
             TensorFlow::RESOURCE => null,
             TensorFlow::VARIANT => null,
-            TensorFlow::UINT32 => "uint32_t",
-            TensorFlow::UINT64 => "uint64_t",
+            TensorFlow::UINT32 => 'uint32_t',
+            TensorFlow::UINT64 => 'uint64_t',
         ];
         $n = $this->nflattened;
         if ($this->dataType == TensorFlow::STRING) {
             $m = $this->dataSize - $this->nflattened * 8;
+
             return TensorFlow::$ffi->cast(
                 "struct {uint64_t offsets[$n]; char data[$m];}",
-                $this->plainData());
+                $this->plainData()
+            );
         } else {
             $cast = @$map[$this->dataType];
             if (isset($cast)) {
                 $cast .= "[$n]";
+
                 return TensorFlow::$ffi->cast($cast, $this->plainData());
             } else {
-                throw new TensorflowException("Not Implemented"); //???
+                throw new TensorflowException('Not Implemented'); //???
             }
         }
     }
@@ -168,7 +175,7 @@ class Tensor
         if ($dim < $this->ndims) {
             $n = $this->shape[$dim];
             if (!is_array($value) || count($value) != $n) {
-                throw new TensorflowException("value/shape mismatch");
+                throw new TensorflowException('value/shape mismatch');
             }
             $dim++;
             $i = 0;
@@ -176,17 +183,19 @@ class Tensor
                 $this->_stringEncode($val, $data, $offset, $dim_offset, $dim, $i);
                 $i++;
             }
+
             return;
         }
 
-        $str = (string)$value;
+        $str = (string) $value;
         $data->offsets[$dim_offset++] = $offset;
         $offset += TensorFlow::$ffi->TF_StringEncode(
             $str,
             strlen($str),
             $data->data + $offset,
             TensorFlow::$ffi->TF_StringEncodedSize(strlen($str)),
-            $this->status->c);
+            $this->status->c
+        );
         if ($this->status->code() != TensorFlow::OK) {
             throw new TensorflowException($this->status->error());
         }
@@ -197,13 +206,14 @@ class Tensor
         if ($dim < $this->ndims) {
             $n = $this->shape[$dim];
             if (!is_array($value) || count($value) != $n) {
-                throw new TensorflowException("value/shape mismatch");
+                throw new TensorflowException('value/shape mismatch');
             }
             $dim++;
             $i = 0;
             foreach ($value as $val) {
                 $this->_encode($val, $data, $dim_offset, $dim, $i++);
             }
+
             return;
         }
         $data[$dim_offset++] = $value;
@@ -265,26 +275,29 @@ class Tensor
         if ($dim < $this->ndims) {
             $n = $this->shape[$dim];
             $dim++;
-            $ret = array();
+            $ret = [];
             for ($i = 0; $i < $n; $i++) {
                 $ret[$i] = $this->_stringDecode($data, $dim_offset, $dim, $i);
             }
+
             return $ret;
         }
 
         $offset = $data->offsets[$dim_offset++];
 
-        $dst = TensorFlow::$ffi->new("char*[1]");
-        $dst_len = TensorFlow::$ffi->new("size_t[1]");
+        $dst = TensorFlow::$ffi->new('char*[1]');
+        $dst_len = TensorFlow::$ffi->new('size_t[1]');
         TensorFlow::$ffi->TF_StringDecode(
             $data->data + $offset,
             $this->dataSize - $offset,
             $dst,
             $dst_len,
-            $this->status->c);
+            $this->status->c
+        );
         if ($this->status->code() != TensorFlow::OK) {
             throw new TensorflowException($this->status->error());
         }
+
         return FFI::string($dst[0], $dst_len[0]);
     }
 
@@ -293,20 +306,23 @@ class Tensor
         if ($dim < $this->ndims) {
             $n = $this->shape[$dim];
             $dim++;
-            $ret = array();
+            $ret = [];
             for ($i = 0; $i < $n; $i++) {
                 $ret[$i] = $this->_decode($data, $dim_offset, $dim, $i);
             }
+
             return $ret;
         }
+
         return $data[$dim_offset++];
     }
 
     public function bytes()
     {
         if (!$this->isSerializable()) {
-            throw new TensorflowException("Unserializable tensor");
+            throw new TensorflowException('Unserializable tensor');
         }
+
         return FFI::string($this->plainData(), $this->dataSize);
     }
 
@@ -335,16 +351,17 @@ class Tensor
             TensorFlow::UINT32 => 1,
             TensorFlow::UINT64 => 1,
         ];
+
         return isset($serializable[$this->dataType]);
     }
 
     public function setBytes(string $str)
     {
         if (!$this->isSerializable()) {
-            throw new TensorflowException("Unserializable tensor");
+            throw new TensorflowException('Unserializable tensor');
         }
         if (strlen($str) != $this->dataSize) {
-            throw new TensorflowException("Size mismatch");
+            throw new TensorflowException('Size mismatch');
         }
         FFI::memcpy($this->plainData(), $str, $this->dataSize);
     }

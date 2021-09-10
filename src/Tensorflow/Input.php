@@ -1,4 +1,5 @@
 <?php
+
 // The tensorflow classes are inspired by: https://github.com/dstogov/php-tensorflow
 
 namespace FuncAI\Tensorflow;
@@ -15,7 +16,7 @@ class Input
 
     public function init(Operation $operation, int $index)
     {
-        $this->c = TensorFlow::$ffi->new("TF_Input");
+        $this->c = TensorFlow::$ffi->new('TF_Input');
         $this->c->oper = $operation->c;
         $this->c->index = $index;
     }
@@ -29,6 +30,7 @@ class Input
     {
         $op = new Operation($this->graph);
         $op->initFromC($this->c->oper);
+
         return $op;
     }
 
@@ -44,12 +46,13 @@ class Input
 
     public function type()
     {
-        return (int)TensorFlow::$ffi->TF_OperationInputType($this->c);
+        return (int) TensorFlow::$ffi->TF_OperationInputType($this->c);
     }
 
     public function shape()
     {
         $producer = $this->producer();
+
         return $producer->shape();
     }
 
@@ -58,6 +61,7 @@ class Input
         $cdata = TensorFlow::$ffi->TF_OperationInput($this->c);
         $output = new Output($this->graph);
         $output->initFromC($cdata);
+
         return $output;
     }
 }

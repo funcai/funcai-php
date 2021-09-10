@@ -1,5 +1,7 @@
 <?php
+
 // The tensorflow classes are inspired by: https://github.com/dstogov/php-tensorflow
+
 namespace FuncAI\Tensorflow;
 
 use FFI;
@@ -15,8 +17,8 @@ class Session
 
     public function __construct(Graph $graph, SessionOptions $options = null, Status $status = null, $c_session = null)
     {
-        if(is_null(self::$tensor_ptr)) {
-            self::$tensor_ptr = TensorFlow::$ffi->type("TF_Tensor*");
+        if (is_null(self::$tensor_ptr)) {
+            self::$tensor_ptr = TensorFlow::$ffi->type('TF_Tensor*');
         }
         $this->graph = $graph;
         if (is_null($options)) {
@@ -82,6 +84,7 @@ class Session
             $ret[] = $dev;
         }
         TensorFlow::$ffi->TF_DeleteDeviceList($list);
+
         return $ret;
     }
 
@@ -105,7 +108,7 @@ class Session
                 }
             } else {
                 $n_fetches = 1;
-                $c_fetches = TensorFlow::$ffi->new("TF_Output[1]");
+                $c_fetches = TensorFlow::$ffi->new('TF_Output[1]');
                 $t_fetchTensors = FFI::arrayType(self::$tensor_ptr, [$n_fetches]);
                 $c_fetchTensors = TensorFlow::$ffi->new($t_fetchTensors);
                 $c_fetches[0] = $fetches->c;
@@ -130,7 +133,7 @@ class Session
                         $c_feedTensors[$i] = $val->c;
                         $i++;
                     } else {
-                        --$n_feeds;
+                        $n_feeds--;
                     }
                 }
             }
@@ -139,27 +142,38 @@ class Session
         $n_targets = 0;
         $c_targets = null;
 
-        TensorFlow::$ffi->TF_SessionRun($this->c, null,
-            $c_feeds, $c_feedTensors, $n_feeds, // Inputs
-            $c_fetches, $c_fetchTensors, $n_fetches, // Outputs
-            $c_targets, $n_targets, // Operations
-            null, $this->status->c);
+        TensorFlow::$ffi->TF_SessionRun(
+            $this->c,
+            null,
+            $c_feeds,
+            $c_feedTensors,
+            $n_feeds, // Inputs
+            $c_fetches,
+            $c_fetchTensors,
+            $n_fetches, // Outputs
+            $c_targets,
+            $n_targets, // Operations
+            null,
+            $this->status->c
+        );
 
         if ($this->status->code() != TensorFlow::OK) {
             throw new TensorflowException($this->status->error());
         }
 
         if (is_array($fetches)) {
-            $ret = array();
+            $ret = [];
             for ($i = 0; $i < $n_fetches; $i++) {
                 $t = new Tensor();
                 $t->initFromC($c_fetchTensors[$i]);
                 $ret[$i] = $t;
             }
+
             return $ret;
-        } else if (!is_null($fetches)) {
+        } elseif (!is_null($fetches)) {
             $t = new Tensor();
             $t->initFromC($c_fetchTensors[0]);
+
             return $t;
         }
 
