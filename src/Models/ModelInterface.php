@@ -16,4 +16,9 @@ interface ModelInterface
      */
     public function getInputData($input);
     public function getInputLayer(): string;
+    /**
+     * @param mixed $input
+     * @return mixed
+     */
+    public function predict($input);
 }

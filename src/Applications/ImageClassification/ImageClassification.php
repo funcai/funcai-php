@@ -4,11 +4,27 @@ namespace FuncAI\Applications\ImageClassification;
 
 use Exception;
 use FuncAI\Applications\Application;
+use FuncAI\Models\ImageClassification\ImageClassificationBalanced;
+use FuncAI\Models\ModelInterface;
 use InvalidArgumentException;
 
 class ImageClassification extends Application
 {
     protected string $exportPath = 'image-classification-export';
+
+    /**
+     * @return ModelInterface
+     * @throws Exception
+     */
+    protected function getModel(): ModelInterface
+    {
+        switch ($this->performance) {
+            case self::PERFORMANCE_BALANCED:
+                return new ImageClassificationBalanced($this->task);
+            default:
+                throw new Exception('Invalid performance setting');
+        }
+    }
 
     public function exportTrainingData(string $exportPath): string
     {
