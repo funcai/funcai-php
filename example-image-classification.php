@@ -27,7 +27,7 @@ require __DIR__.'/vendor/autoload.php';
  * of an image.
  */
 $ai = new ImageClassification();
-$ai->setTask('bread-classification');
+$ai->setTask('cats_dogs');
 $ai->setPerformance(ImageClassification::PERFORMANCE_BALANCED);
-$output = $ai->predict(__DIR__ . '/sample_data/butterfly.jpg');
+$output = $ai->predict(__DIR__ . '/sample_data/cat.jpg');
 var_dump($output);

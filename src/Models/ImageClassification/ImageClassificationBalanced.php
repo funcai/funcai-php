@@ -25,7 +25,7 @@ class ImageClassificationBalanced extends AbstractModel
 
     public function getModelPath(): string
     {
-        return Config::getModelBasePath() . $this->modelTaskPath . '/performance_balanced';
+        return Config::getModelBasePath() . '/' . $this->modelTaskPath . '/performance_balanced';
     }
 
     public function getOutputTensor(): Output
@@ -68,7 +68,7 @@ class ImageClassificationBalanced extends AbstractModel
 
     public function getInputLayer(): string
     {
-        return 'serving_default_input_1';
+        return 'serving_default_keras_layer_input';
     }
 
     protected function transformResult($result)
