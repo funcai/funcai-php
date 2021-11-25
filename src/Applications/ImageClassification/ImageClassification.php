@@ -25,11 +25,11 @@ class ImageClassification extends Application
                 throw new Exception('Invalid performance setting');
         }
     }
-    
+
     /*
      * @throws Exception
      */
-    public function exportTrainingData(string $exportPath): string
+    public function exportTrainingData(string $baseExportPath): string
     {
         $exportPath = $this->getExportPath($baseExportPath);
 
@@ -68,6 +68,12 @@ class ImageClassification extends Application
                 $this->resizeImage($sampleOutputPath, 224, 224);
             }
         }
+
+        file_put_contents($exportPath . '/config.json', json_encode([
+            'version' => '1.0',
+            'task' => $this->getTask(),
+            'performance' => $this->getPerformance(),
+        ]));
 
         return $exportPath;
     }

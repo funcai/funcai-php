@@ -7,6 +7,8 @@ require __DIR__.'/vendor/autoload.php';
 
 
 $ai = new ImageClassification();
+$ai->setTask('sample');
+$ai->setPerformance(ImageClassification::PERFORMANCE_BALANCED);
 
 $ai->addTrainingSample(new ImageClassificationTrainingSample('./sample_data/butterfly.jpg', 1));
 $ai->addTrainingSample(new ImageClassificationTrainingSample('./sample_data/prince-akachi.jpg', 0));

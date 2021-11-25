@@ -16,7 +16,8 @@
       "ext-gd": "*",
       "ext-curl": "*",
       "ext-phar": "*",
-      "ext-ffi": "*"
+      "ext-ffi": "*",
+      "ext-json": "*"
     },
     "autoload": {
       "psr-4": {
