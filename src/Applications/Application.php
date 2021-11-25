@@ -7,7 +7,7 @@ use FuncAI\Models\ModelInterface;
 
 abstract class Application
 {
-    const PERFORMANCE_BALANCED = 'performance_balanced';
+    const PERFORMANCE_BALANCED = 'balanced';
 
     /**
      * @var array<int, TrainingSample>
