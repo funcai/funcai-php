@@ -25,10 +25,13 @@ class ImageClassification extends Application
                 throw new Exception('Invalid performance setting');
         }
     }
-
+    
+    /*
+     * @throws Exception
+     */
     public function exportTrainingData(string $exportPath): string
     {
-        $exportPath = realpath($exportPath) . '/' . $this->exportPath;
+        $exportPath = $this->getExportPath($baseExportPath);
 
         if (!is_dir($exportPath)) {
             if (!@mkdir($exportPath, 0777, true)) {
@@ -69,6 +72,17 @@ class ImageClassification extends Application
         return $exportPath;
     }
 
+    private function getExportPath(string $baseExportPath): string
+    {
+        // Try to resolve the path, if that's not possible just use the path as is.
+        $resolvedBaseExportPath = realpath($baseExportPath);
+        if ($resolvedBaseExportPath === false) {
+            $resolvedBaseExportPath = $baseExportPath;
+        }
+        $exportPath = $resolvedBaseExportPath . '/' . $this->exportPath;
+        return $exportPath;
+    }
+
     /**
      * @param string $dir
      *
@@ -104,6 +118,9 @@ class ImageClassification extends Application
         return rmdir($dir);
     }
 
+    /**
+     * @throws Exception
+     */
     private function resizeImage(string $sourceImage, int $maxWidth, int $maxHeight, int $quality = 80): bool
     {
         // Obtain image from given source file.
